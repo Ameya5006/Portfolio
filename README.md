@@ -1,6 +1,12 @@
 # Ameya — Developer Portfolio
 
-A futuristic, responsive portfolio built with React, TypeScript, and Vite.
+[![Live Portfolio](https://img.shields.io/badge/VIEW_LIVE_PORTFOLIO-FF4238?style=for-the-badge&logo=vercel&logoColor=white)](https://portfolio-ameya5006s-projects.vercel.app)
+
+A futuristic, responsive portfolio showcasing GymFlow, PalmChef, Amedic, and FloatChat.
+
+## Stack
+
+React 19 · TypeScript · Vite · CSS · Lucide
 
 ## Local development
 
@@ -15,4 +21,4 @@ npm run dev
 npm run build
 ```
 
-Vercel detects Vite automatically. Use `npm run build` as the build command and `dist` as the output directory if prompted.
+Vercel detects Vite automatically. Build command: `npm run build`. Output directory: `dist`.
