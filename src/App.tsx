@@ -1,113 +1,89 @@
-import { useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowUpRight, Code2, GitBranch as Github, Hand, HeartPulse, Layers3, Menu, Pause, Play, Smartphone, Waves, X, Zap } from "lucide-react";
+import { useEffect, useState, type ReactNode } from 'react';
+import { ArrowDown, ArrowUpRight, Award, Braces, Check, Code2, Cpu, Dumbbell, Github, GraduationCap, Hand, HeartPulse, Home, Linkedin, MapPin, MessageCircle, Pause, Play, Radio, Send, Sparkles, Waves, Workflow, X } from 'lucide-react';
 
-const github = "https://github.com/Ameya5006";
+const github = 'https://github.com/Ameya5006';
+const linkedin = 'https://www.linkedin.com/in/ameya-agarwal/';
+const navigation = [
+  { id: 'home', label: 'Start', icon: Home }, { id: 'work', label: 'Projects', icon: Braces },
+  { id: 'stack', label: 'Toolkit', icon: Cpu }, { id: 'journey', label: 'Journey', icon: Workflow },
+  { id: 'credentials', label: 'Credentials', icon: Award }, { id: 'contact', label: 'Connect', icon: Send },
+];
 const projects = [
-  { id: "01", name: "GymFlow", kind: "FREELANCE / FULL-STACK", className: "gym", headline: <>Two gyms.<br />One flow.</>, description: "A production platform for Fitness First Boxing Club and Nisha Fitness. Memberships, admin dashboards, and the busywork—automated.", tags: ["React 19", "TypeScript", "Firebase", "Apps Script"], details: "Firebase Auth + Firestore · Google Sheets sync · WhatsApp reminders · UPI payments · Tailwind CSS · Vite · Vercel", repo: "/Dual-gym-website", live: "https://boxingguruji.vercel.app/", icon: Zap },
-  { id: "02", name: "PalmChef", kind: "AI-POWERED / WEB APP", className: "palm", headline: <>Messy hands.<br />Clean controls.</>, description: "A hands-free kitchen assistant. Navigate with gestures, listen to recipes, and keep cooking without touching the screen.", tags: ["React 18", "MediaPipe", "Gemini", "MongoDB"], details: "Express + Node.js · JWT · Zustand · PDF.js · Web Speech API · Timers · Offline PWA · Docker · Nginx · Render", repo: "/PalmChef", live: "https://palmchef-14qa.onrender.com", icon: Hand },
-  { id: "03", name: "Amedic", kind: "FLUTTER / HEALTH & FITNESS", className: "amedic", headline: <>Small steps.<br />Better days.</>, description: "A pocket health dashboard for steps, goals, BMI/BMR, sleep, nutrition, and shareable progress summaries.", tags: ["Flutter", "Dart", "pedometer", "fl_chart"], details: "share_plus · Interactive charts · Health calculations · Flutter animations", repo: "/Amedic", icon: HeartPulse },
-  { id: "04", name: "FloatChat", kind: "FLUTTER / ARGO MOBILE", className: "float", headline: <>Big ocean.<br />Pocket explorer.</>, description: "Explore ARGO ocean data through maps, profiles, alerts, downloads, and a conversational demo.", tags: ["Flutter", "Dart", "flutter_map", "latlong2"], details: "Map-based exploration · Ocean profiles · Alerts · Data downloads · Conversational demo", repo: "/FloatChat_app", icon: Waves },
+  { id: 'gym', number: '01', title: 'GymFlow', category: 'FREELANCE · IN PRODUCTION', headline: 'Two gyms.\nZero juggling.', description: 'One platform for Fitness First Boxing Club and Nisha Fitness. Built to bring memberships, payments and day-to-day operations into one place.', highlights: ['Member + admin dashboards', 'Sheets sync + WhatsApp reminders', 'Firebase authentication + UPI'], tags: ['React 19', 'TypeScript', 'Firebase', 'Apps Script'], detail: 'React 19 · TypeScript 6 · Vite 8 · Tailwind CSS · Firebase Auth · Firestore · Google Sheets API · Google Apps Script · WhatsApp notifications · UPI integration · Vercel', repo: '/Dual-gym-website', live: 'https://boxingguruji.vercel.app/' },
+  { id: 'palm', number: '02', title: 'PalmChef', category: 'FULL-STACK · AI + INTERACTION', headline: 'Good food.\nHands off.', description: 'A kitchen assistant for the moments your hands are busy. Gesture controls, spoken recipes and AI assistance keep the cooking moving.', highlights: ['MediaPipe gesture navigation', 'Gemini recipes + voice guidance', 'Timers + offline PWA'], tags: ['React 18', 'MediaPipe', 'Gemini', 'MongoDB'], detail: 'TypeScript · Vite · Tailwind CSS · Node.js · Express · MongoDB / Mongoose · JWT · bcrypt.js · CORS · Zustand · PDF.js · Web Speech API · Vitest · React Testing Library · Docker · Nginx · Render', repo: '/PalmChef', live: 'https://palmchef-14qa.onrender.com' },
+  { id: 'amedic', number: '03', title: 'Amedic', category: 'FLUTTER · HEALTH TRACKER', headline: 'Little habits.\nBigger picture.', description: 'A pocket view of everyday wellbeing. Track movement, understand health calculations and turn scattered habits into visible progress.', highlights: ['Steps, goals + progress charts', 'BMI/BMR, sleep + nutrition', 'Shareable health summaries'], tags: ['Flutter', 'Dart', 'pedometer', 'fl_chart'], detail: 'Flutter · Dart · pedometer · fl_chart · share_plus · Health calculations · Interactive charts · Flutter animations', repo: '/Amedic' },
+  { id: 'ocean', number: '04', title: 'FloatChat', category: 'FLUTTER · ARGO MOBILE', headline: 'An ocean of data.\nA pocket explorer.', description: 'Bring ARGO ocean data closer. Explore maps and ocean profiles, browse alerts, download data and try the conversational demo.', highlights: ['Interactive ocean maps', 'Profiles, alerts + downloads', 'Conversational demo'], tags: ['Flutter', 'Dart', 'flutter_map', 'latlong2'], detail: 'Flutter · Dart · flutter_map · latlong2 · Map-based exploration · Ocean profiles · Alerts · Data downloads · Conversational demo', repo: '/FloatChat_app' },
 ];
 const toolkit = [
-  { number: "01", title: "Languages", items: ["Python", "Java", "C++", "TypeScript", "JavaScript", "Dart", "HTML", "CSS"] },
-  { number: "02", title: "Interfaces", items: ["React 18 / 19", "Flutter", "Tailwind CSS", "Vite", "Framer Motion", "Zustand"] },
-  { number: "03", title: "Behind the scenes", items: ["Node.js", "Express", "MongoDB", "Firebase Auth", "Firestore", "REST APIs", "JWT"] },
-  { number: "04", title: "Connect & ship", items: ["Gemini", "MediaPipe", "Google Sheets API", "Apps Script", "Docker", "Nginx", "Vercel", "Render", "Git / GitHub"] },
+  { title: 'Languages', items: ['Python', 'Java', 'C++', 'TypeScript', 'JavaScript', 'Dart', 'HTML', 'CSS'] },
+  { title: 'Interfaces', items: ['React 18 / 19', 'Flutter', 'Tailwind CSS', 'Vite', 'Framer Motion', 'Zustand', 'React Router'] },
+  { title: 'Backend', items: ['Node.js', 'Express', 'MongoDB', 'Mongoose', 'Firebase Auth', 'Firestore', 'REST APIs', 'JWT', 'bcrypt.js', 'CORS', 'Zod'] },
+  { title: 'AI & APIs', items: ['Gemini API', 'MediaPipe', 'Web Speech API', 'Google Sheets API', 'Apps Script', 'WhatsApp integration', 'UPI integration'] },
+  { title: 'Ship & test', items: ['Docker', 'Nginx', 'Vercel', 'Render', 'Git / GitHub', 'Vitest', 'React Testing Library', 'ESLint', 'Prettier', 'PostCSS', 'Nodemon', 'VS Code'] },
+  { title: 'App extras', items: ['PDF.js', 'pedometer', 'fl_chart', 'share_plus', 'flutter_map', 'latlong2', 'Flutter animations'] },
 ];
-function ExternalLink({ href, children, className = "" }: { href: string; children: React.ReactNode; className?: string }) {
-  return <a href={href} target="_blank" rel="noopener noreferrer" className={className}>{children}<ArrowUpRight size={17} aria-hidden="true" /><span className="sr-only"> (opens in a new tab)</span></a>;
+function External({ href, children, className = '' }: { href: string; children: ReactNode; className?: string }) {
+  return <a href={href} target="_blank" rel="noopener noreferrer" className={className}>{children}<ArrowUpRight size={16} aria-hidden="true" /><span className="sr-only"> (opens in a new tab)</span></a>;
+}
+function ProjectVisual({ id }: { id: string }) {
+  return <div className={`project-art ${id}`} aria-hidden="true">
+    <div className="art-grid" /><span className="art-caption mono">SYSTEM AT A GLANCE</span>
+    {id === 'gym' && <div className="gym-system"><div className="gym-brands"><span>FITNESS FIRST<br /><b>BOXING CLUB</b></span><span>NISHA<br /><b>FITNESS</b></span></div><div className="connector-lines" /><div className="gym-hub"><Dumbbell size={34} /><strong>GymFlow</strong><span>ONE CONNECTED WORKFLOW</span></div><div className="gym-nodes"><span><Check size={15} />Members</span><span><Workflow size={15} />Automation</span><span><Check size={15} />Payments</span></div></div>}
+    {id === 'palm' && <div className="gesture-system"><div className="gesture-orbit" /><div className="hand-frame"><i /><i /><i /><i /><Hand size={106} strokeWidth={1} /><span className="scan-line" /></div><div className="gesture-chip"><Radio size={15} /> GESTURE INPUT</div><div className="recipe-slip"><Sparkles size={20} /><div><strong>A little kitchen magic.</strong><span>Gesture → recipe → voice</span></div><div className="voice-bars">{Array.from({ length: 7 }, (_, i) => <i key={i} style={{ animationDelay: `${i * .12}s` }} />)}</div></div></div>}
+    {id === 'amedic' && <div className="health-system"><div className="health-orbit" /><div className="phone"><div className="phone-notch" /><div className="phone-title"><HeartPulse size={19} /><b>Amedic</b></div><span className="phone-sub">YOUR DAY, CONNECTED</span><div className="activity-ring"><HeartPulse size={35} strokeWidth={1.2} /><span>KEEP MOVING</span></div><div className="health-tags"><span>Steps</span><span>Sleep</span><span>Nutrition</span></div><svg viewBox="0 0 220 55"><path d="M0 40 C20 40 18 15 40 22 S65 52 82 30 S105 40 122 17 S150 40 164 20 S190 30 220 6" fill="none" stroke="currentColor" strokeWidth="2" /></svg><small>Habits → insights → progress</small></div><span className="health-float"><Check size={16} />Small steps count.</span></div>}
+    {id === 'ocean' && <div className="ocean-system"><svg className="ocean-contours" viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice">{Array.from({ length: 11 }, (_, i) => <path key={i} d={`M-80 ${30 + i * 30} C80 ${-60 + i * 27} 180 ${270 + i * 14} 320 ${100 + i * 24} S540 ${200 + i * 20} 590 ${80 + i * 30}`} />)}</svg><div className="ocean-point point-one"><i /><span>ARGO FLOAT</span></div><div className="ocean-point point-two"><i /></div><div className="ocean-point point-three"><i /></div><div className="ocean-panel"><Waves size={31} strokeWidth={1.2} /><div><strong>Below the surface.</strong><span>MAPS / PROFILES / DISCOVERY</span></div><MapPin size={18} /></div><span className="ocean-coordinate mono">EXPLORE A DIFFERENT DEPTH</span></div>}
+    <span className="art-index mono">{id === 'gym' ? 'WEB / 01' : id === 'palm' ? 'AI / 02' : id === 'amedic' ? 'MOBILE / 03' : 'MOBILE / 04'}</span>
+  </div>;
 }
 
-export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [motion, setMotion] = useState(true);
-  const [role, setRole] = useState(0);
-  const [activeSection, setActiveSection] = useState("home");
-  const heroRef = useRef<HTMLDivElement>(null);
-  const roles = ["full-stack developer", "Flutter builder", "AI/ML explorer"];
+export default function HomePage() {
+  const [motion, setMotion] = useState(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [intro, setIntro] = useState(() => { try { return !sessionStorage.getItem('ameya-intro-v2') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { return false; } });
+  const [active, setActive] = useState('home');
+  const [toolGroup, setToolGroup] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [filter, setFilter] = useState('All');
   useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (query.matches) setMotion(false);
-    const change = () => setMotion(!query.matches);
-    query.addEventListener("change", change);
-    return () => query.removeEventListener("change", change);
+    if (!intro) return;
+    const timer = window.setTimeout(() => setIntro(false), 1150);
+    try { sessionStorage.setItem('ameya-intro-v2', 'seen'); } catch { /* Storage is optional. */ }
+    return () => window.clearTimeout(timer);
+  }, [intro]);
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const change = () => { setMotion(!query.matches); if (query.matches) setIntro(false); };
+    query.addEventListener('change', change);
+    return () => query.removeEventListener('change', change);
   }, []);
   useEffect(() => {
-    if (!motion) return;
-    const timer = window.setInterval(() => setRole(value => (value + 1) % 3), 3200);
-    return () => window.clearInterval(timer);
-  }, [motion]);
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => { if (entry.isIntersecting) setActiveSection(entry.target.id); });
-    }, { rootMargin: "-15% 0px -55% 0px", threshold: 0 });
-    document.querySelectorAll("main > section[id]").forEach(section => observer.observe(section));
-    return () => observer.disconnect();
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const line = window.innerHeight * .4;
+      let current = 'home';
+      navigation.forEach(({ id }) => { if ((document.getElementById(id)?.getBoundingClientRect().top ?? Infinity) <= line) current = id; });
+      setActive(current);
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(height > 0 ? window.scrollY / height : 0);
+    };
+    const scroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update(); window.addEventListener('scroll', scroll, { passive: true }); window.addEventListener('resize', scroll);
+    return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', scroll); window.removeEventListener('resize', scroll); };
   }, []);
-  useEffect(() => {
-    if (!menuOpen) return;
-    const close = (event: KeyboardEvent) => { if (event.key === "Escape") setMenuOpen(false); };
-    document.addEventListener("keydown", close);
-    return () => document.removeEventListener("keydown", close);
-  }, [menuOpen]);
-  return (
-    <div className={`portfolio ${motion ? "motion-on" : "motion-off"}`}>
-      <a className="skip-link" href="#work">Skip to projects</a>
-      <header className="site-header">
-        <a className="wordmark" href="#home" aria-label="Ameya — home">a<span>/</span><span className="wordmark-name">AMEYA</span></a>
-        <nav aria-label="Main navigation" className={menuOpen ? "nav is-open" : "nav"} id="main-nav">
-          {[['work', 'Work'], ['stack', 'Stack'], ['about', 'About']].map(([id, label]) => <a key={id} href={`#${id}`} aria-current={activeSection === id ? "location" : undefined} onClick={() => setMenuOpen(false)}>{label}</a>)}
-          <a href="#contact" className="nav-contact" onClick={() => setMenuOpen(false)}>Let’s connect <ArrowUpRight size={16} /></a>
-        </nav>
-        <button className="menu-toggle" aria-expanded={menuOpen} aria-controls="main-nav" aria-label={menuOpen ? "Close navigation" : "Open navigation"} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
-      </header>
-      <main>
-        <section className="hero wrap" id="home">
-          <div className="hero-top mono"><span>INDEPENDENT DEVELOPER / INDIA</span><span className="edition">SELECTED WORK — 2026</span></div>
-          <div className="hero-stage" ref={heroRef} onPointerMove={event => {
-            if (!motion || event.pointerType !== "mouse") return;
-            const box = event.currentTarget.getBoundingClientRect();
-            event.currentTarget.style.setProperty("--pointer-x", `${((event.clientX - box.left) / box.width - .5) * 14}px`);
-            event.currentTarget.style.setProperty("--pointer-y", `${((event.clientY - box.top) / box.height - .5) * 14}px`);
-          }} onPointerLeave={() => { heroRef.current?.style.setProperty("--pointer-x", "0px"); heroRef.current?.style.setProperty("--pointer-y", "0px"); }}>
-            <div className="hero-copy">
-              <p className="eyebrow"><span className="red-line" /> HEY, I’M</p>
-              <h1>AMEYA<span>.</span></h1>
-              <h2>Ideas in.<br /><span className="outline-text">Impact out.</span></h2>
-              <p className="hero-description">A <span className="role" key={motion ? role : "static"}>{roles[role]}</span><br />turning everyday friction into things that work.</p>
-              <div className="hero-actions"><a href="#work" className="button-primary">Explore my work <ArrowDown size={18} /></a><ExternalLink href={github} className="github-link"><Github size={20} /> GitHub</ExternalLink></div>
-            </div>
-            <div className="hero-art" aria-hidden="true">
-              <div className="art-orbit orbit-one" /><div className="art-orbit orbit-two" />
-              <img src="/images/chrome-core.webp" alt="" width="900" height="900" fetchPriority="high" className="chrome-core" />
-              <span className="art-coordinate coordinate-top mono">IDEA → CODE → REAL WORLD</span>
-              <span className="art-coordinate coordinate-bottom mono"><span>WEB</span><span>MOBILE</span><span>AUTOMATION</span></span>
-              <span className="art-cross cross-one">+</span><span className="art-cross cross-two">+</span>
-            </div>
-          </div>
-          <div className="hero-bottom"><span className="mono">CURRENTLY EXPLORING <span className="white">AI/ML + DSA</span></span><button className="motion-toggle mono" onClick={() => setMotion(!motion)} aria-pressed={motion}>{motion ? <Pause size={14} /> : <Play size={14} />} MOTION {motion ? "ON" : "OFF"}</button><a href="#work" className="scroll-link mono">SCROLL TO EXPLORE <ArrowDown size={15} /></a></div>
-        </section>
-        <div className="marquee" aria-hidden="true"><div className="marquee-track">{[0, 1].map(index => <div className="marquee-group" key={index}><span>BUILD WITH INTENT</span><span className="marquee-star">✳</span><span className="marquee-outline">SHIP SOMETHING USEFUL</span><span className="marquee-star">✳</span><span>STAY CURIOUS</span><span className="marquee-star">✳</span></div>)}</div></div>
-        <section className="work-section wrap section-space" id="work">
-          <div className="section-heading"><div><p className="eyebrow">01 / SELECTED BUILDS</p><h2>Less talk.<br /><span className="muted-heading">More shipped.</span></h2></div><p>Web. Mobile. Useful automation.<br />A few things I’ve put into the world.</p></div>
-          <div className="project-grid">{projects.map(project => {
-            const Icon = project.icon;
-            return <article className={`project-card ${project.className}`} key={project.id}>
-              <div className="project-visual">
-                <div className="project-visual-top mono"><span>{project.kind}</span><span>/{project.id}</span></div>
-                <h3>{project.headline}</h3><Icon className="project-icon" size={148} strokeWidth={1} aria-hidden="true" />
-                <div className="project-visual-bottom mono">{project.id === "01" ? <><span>FITNESS FIRST BOXING CLUB</span><span>NISHA FITNESS</span></> : project.id === "02" ? <><span>GESTURE + VOICE</span><span>HANDS-FREE</span></> : project.id === "03" ? <><span>MOVE. TRACK. REPEAT.</span><span>HEALTH IN YOUR POCKET</span></> : <><span>ARGO OCEAN DATA</span><span>GO DEEPER ↓</span></>}</div>
-              </div>
-              <div className="project-info"><div className="project-title-row"><h3>{project.name}<span>{project.id === "04" ? " / ARGO Mobile" : ""}</span></h3>{project.live && <span className="live-label">LIVE PROJECT</span>}</div><p>{project.description}</p><div className="tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div><details className="project-details"><summary>Under the hood <span>+</span></summary><p>{project.details}</p></details><div className="project-links">{project.live && <ExternalLink href={project.live}>Visit live site</ExternalLink>}<ExternalLink href={`${github}${project.repo}`}><Github size={16} /> Source code</ExternalLink></div></div>
-            </article>;
-          })}</div>
-          <div className="work-footer"><span className="mono">EXPERIMENTS, SIDE QUESTS & THE REST</span><ExternalLink href={`${github}?tab=repositories`}>Explore all repositories</ExternalLink></div>
-        </section>
-        <section className="stack-section section-space" id="stack"><div className="wrap"><div className="section-heading"><div><p className="eyebrow">02 / THE TOOLKIT</p><h2>The right tools.<br /><span className="muted-heading">No magic wand.</span></h2></div><Code2 className="section-symbol" size={74} strokeWidth={1} aria-hidden="true" /></div><div className="toolkit">{toolkit.map(group => <div className="tool-row" key={group.number}><div className="tool-title"><span className="mono">{group.number}</span><h3>{group.title}</h3></div><div className="tool-items">{group.items.map(item => <span key={item}>{item}</span>)}</div></div>)}</div><details className="utility-drawer"><summary>Also in the utility drawer <span>+</span></summary><p>React Router · Mongoose · bcrypt.js · CORS · Zod · PDF.js · Web Speech API · Vitest · React Testing Library · ESLint · Prettier · PostCSS · Nodemon · fl_chart · pedometer · share_plus · flutter_map · latlong2 · Flutter animations · WhatsApp integration · UPI integration · VS Code</p></details></div></section>
-        <section className="about-section wrap section-space" id="about"><div className="about-intro"><p className="eyebrow">03 / THE HUMAN BEHIND THE CODE</p><h2>Curiosity is<br />the <span className="red-text">engine.</span></h2><p>I’m Ameya, a B.Tech CSE student at Bennett University. I build full-stack products and Flutter apps, especially when there’s a real problem worth untangling.</p><p>Currently getting deeper into AI/ML and sharpening my problem-solving with C++. The loop is simple: learn, build, break, improve.</p><div className="about-pills"><span><Layers3 size={16} /> Full-stack</span><span><Smartphone size={16} /> Flutter</span><span><Code2 size={16} /> C++ / DSA</span></div></div><aside className="practice-card"><div className="practice-top mono"><span>THE DAILY SIDE QUEST</span><Code2 size={22} /></div><h3>One problem.<br />One better idea.</h3><p>Arrays, hashing, binary search, sorting—and plenty of “oh, that’s why.”</p><div className="practice-stats"><div><strong>12<span>↗</span></strong><span>problems synced</span></div><div><strong>03<span>d</span></strong><span>verified streak</span></div></div><p className="snapshot mono">SNAPSHOT: 05 SEP 2026<br />REPO SUBMISSIONS · STREAK: 02–04 SEP<br />NOT A LIVE LEETCODE TOTAL</p><ExternalLink href={`${github}/neetcode-submissions`}>Follow the NeetCode journey</ExternalLink></aside></section>
-        <section className="contact-section" id="contact"><div className="wrap"><div className="contact-top"><span className="eyebrow">04 / NEXT TRANSMISSION</span><span className="mono">GOOD IDEAS DESERVE TO EXIST.</span></div><h2>Have something<br /><span>in mind?</span><ArrowUpRight aria-hidden="true" className="contact-arrow" /></h2><div className="contact-bottom"><p>Projects, learning opportunities, or a genuinely<br className="desktop-break" /> interesting problem. I’m listening.</p><ExternalLink href={github} className="button-primary"><Github size={20} /> Find me on GitHub</ExternalLink></div></div></section>
-      </main>
-      <footer className="site-footer wrap"><a className="wordmark" href="#home" aria-label="Back to top">a<span>/</span></a><span className="mono">© 2026 AMEYA · ALWAYS IN PROGRESS.</span><a href="#home" className="mono">BACK TO TOP <ArrowUpRight size={15} /></a></footer>
-    </div>
-  );
+  const visibleProjects = projects.filter(project => filter === 'All' || (filter === 'Web' ? ['gym', 'palm'].includes(project.id) : ['amedic', 'ocean'].includes(project.id)));
+  return <div className={`portfolio ${motion ? 'motion-on' : 'motion-off'}`}>
+    {intro && <div className="intro-screen" role="status" aria-label="Ameya portfolio introduction"><div className="intro-logo">a<span>/</span></div><p className="mono">IDEAS INTO INTERFACES.</p><div className="intro-line" /><button onClick={() => setIntro(false)} aria-label="Skip introduction"><X size={16} /> Skip intro</button></div>}
+    <a className="skip-link" href="#work">Skip to projects</a><div className="reading-progress" style={{ transform: `scaleX(${progress})` }} />
+    <header className="site-header wrap"><a className="wordmark" href="#home" aria-label="Ameya home">a<span>/</span><small>AMEYA AGARWAL</small></a><span className="header-status mono"><i /> BUILDER. STILL CURIOUS.</span><External href={linkedin} className="header-connect">Let’s talk <MessageCircle size={16} /></External></header>
+    <nav className="section-dock" aria-label="Section navigation">{navigation.map(({ id, label, icon: Icon }) => <a href={`#${id}`} key={id} aria-label={label} aria-current={active === id ? 'location' : undefined}><Icon size={18} strokeWidth={1.6} /><span>{label}</span></a>)}<div className="dock-divider" /><button onClick={() => setMotion(!motion)} aria-label={motion ? 'Pause animations' : 'Enable animations'} aria-pressed={motion}>{motion ? <Pause size={16} /> : <Play size={16} />}<span>{motion ? 'Pause motion' : 'Enable motion'}</span></button></nav>
+    <main>
+      <section className="hero wrap" id="home"><div className="hero-backdrop" aria-hidden="true" /><div className="hero-copy"><p className="eyebrow"><span className="signal-dot" /> HELLO, WORLD. I’M AMEYA.</p><h1>Curiosity.<br />Code.<br /><span>A little chaos.</span></h1><p className="hero-description">I turn everyday friction into <strong>full-stack products</strong>, <strong>Flutter apps</strong> and useful automation.</p><div className="hero-actions"><a className="primary-button" href="#work">Enter the playground <ArrowDown size={17} /></a><External href={github} className="icon-link"><Github size={19} /><span className="sr-only">GitHub</span></External><External href={linkedin} className="icon-link"><Linkedin size={18} /><span className="sr-only">LinkedIn</span></External></div><p className="hero-footnote mono">B.TECH CSE @ BENNETT UNIVERSITY <span>↗</span> INDIA</p></div><div className="hero-art" aria-hidden="true"><div className="orbit orbit-a" /><div className="orbit orbit-b" /><div className="orbit-cross cross-a">+</div><div className="orbit-cross cross-b">+</div><img src="/images/chrome-core.webp" width="900" height="900" fetchPriority="high" alt="" /><span className="art-label label-top mono">IMAGINATION, COMPILED.</span><span className="art-label label-bottom mono"><i /> IDEAS → CODE → REAL WORLD</span><span className="vertical-label mono">WEB · MOBILE · AI EXPLORATION</span></div><div className="hero-baseline"><span className="mono">CURRENT QUEST <b>AI / ML + DSA</b></span><a href="#work" className="mono">SCROLL INTO THE GOOD STUFF <ArrowDown size={15} /></a></div></section>
+      <div className="ticker" aria-hidden="true"><div className="ticker-track">{[0, 1].map(i => <div key={i}><span>THINK IT</span><b>↗</b><span className="outline">BUILD IT</span><b>✳</b><span>BREAK IT</span><b>↗</b><span className="outline">MAKE IT BETTER</span><b>✳</b></div>)}</div></div>
+      <section className="work-section wrap section-space" id="work"><div className="section-heading"><div><p className="eyebrow">01 / SELECTED PROJECTS</p><h2>Built for <em>real life.</em></h2></div><p>Four builds. Different problems.<br />The same itch to make things work.</p></div><div className="project-toolbar"><div className="filter-group" aria-label="Filter projects">{['All', 'Web', 'Flutter'].map(item => <button key={item} aria-pressed={filter === item} onClick={() => setFilter(item)}>{item}<span>{item === 'All' ? '04' : '02'}</span></button>)}</div><span className="mono project-hint">A TOUR THROUGH THE BUILDS ↓</span></div><div className="project-list">{visibleProjects.map(project => <article className={`project-story story-${project.id}`} key={project.id}><ProjectVisual id={project.id} /><div className="project-copy"><div className="project-kicker mono"><span>{project.category}</span><span>/{project.number}</span></div><h3>{project.title}<span>{project.id === 'ocean' ? ' / ARGO Mobile' : ''}</span></h3><h4>{project.headline.split('\n').map((line, i) => <span key={line}>{line}{i === 0 && <br />}</span>)}</h4><p>{project.description}</p><ul className="project-highlights">{project.highlights.map(item => <li key={item}><Check size={14} />{item}</li>)}</ul><div className="tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div><details className="technical-details"><summary>Full technical stack <span>+</span></summary><p>{project.detail}</p></details><div className="project-links">{project.live && <External href={project.live} className="project-live">Open project</External>}<External href={`${github}${project.repo}`}><Github size={15} />Code</External></div></div></article>)}</div><div className="work-footer"><span className="mono">MORE EXPERIMENTS. MORE SIDE QUESTS.</span><External href={`${github}?tab=repositories`}>All repositories</External></div></section>
+      <section className="stack-section section-space" id="stack"><div className="wrap"><div className="section-heading"><div><p className="eyebrow">02 / THE TOOLKIT</p><h2>Many tools.<br /><em>One curious mind.</em></h2></div><div className="stack-symbol" aria-hidden="true"><Cpu size={68} strokeWidth={.8} /></div></div><div className="toolkit-layout"><div className="toolkit-filters" aria-label="Technology categories">{toolkit.map((group, i) => <button key={group.title} aria-pressed={toolGroup === i} aria-controls="toolkit-panel" onClick={() => setToolGroup(i)}><span className="mono">0{i + 1}</span>{group.title}<ArrowUpRight size={16} /></button>)}</div><div className="toolkit-panel" id="toolkit-panel"><span className="mono">TOOLS I’VE WORKED WITH / 0{toolGroup + 1}</span><h3>{toolkit[toolGroup].title}<span>_</span></h3><div className="tech-cloud" key={toolGroup}>{toolkit[toolGroup].items.map((item, i) => <span key={item} style={{ animationDelay: `${i * 25}ms` }}>{item}</span>)}</div><p>No proficiency bars. Just tools behind the things I build.</p></div></div></div></section>
+      <section className="journey-section wrap section-space" id="journey"><div className="section-heading"><div><p className="eyebrow">03 / PEOPLE, PRODUCTS & PROGRESS</p><h2>More than <em>a commit log.</em></h2></div></div><div className="journey-layout"><div className="timeline"><article><div className="timeline-icon"><Code2 size={19} /></div><span className="mono">BUILDING / FREELANCE</span><h3>Code that has a day job.</h3><p>Built GymFlow for two gyms, connecting member experiences with admin tools, payments and automation.</p><a href="#work">Explore the build <ArrowUpRight size={14} /></a></article><article><div className="timeline-icon"><GraduationCap size={19} /></div><span className="mono">LEARNING / BENNETT UNIVERSITY</span><h3>B.Tech, Computer Science.</h3><p>Turning coursework into full-stack and Flutter projects. Exploring AI/ML and strengthening problem-solving with C++.</p></article><article><div className="timeline-icon"><Workflow size={19} /></div><span className="mono">BEYOND CODE / CAMPUS EXPERIENCE</span><h3>People skills ship things, too.</h3><p>Placement Committee, Career Services Center at Bennett University. Student Council operations and Uphoria coordination: teams, resources and event logistics.</p><External href={linkedin}>More on LinkedIn</External></article></div><aside className="practice-panel"><div className="practice-heading mono"><span>THE PROBLEM-SOLVING LOOP</span><Braces size={21} /></div><h3>One more<br /><em>“got it.”</em></h3><p>Arrays. Hashing. Binary search. Sorting.<br />Small reps, sharper thinking.</p><div className="practice-stats"><div><strong>12<span>↗</span></strong><span>problems synced</span></div><div><strong>03<span>d</span></strong><span>verified streak</span></div></div><div className="practice-topics mono"><span>arrays[]</span><span>hash&#123;&#125;</span><span>search()</span></div><small>Repository snapshot · 5 Sep 2026<br />Streak: 2–4 Sep · Synced submissions only</small><External href={`${github}/neetcode-submissions`}>NeetCode submissions</External></aside></div></section>
+      <section className="credentials-section wrap section-space" id="credentials"><div className="section-heading"><div><p className="eyebrow">04 / FOUNDATIONS THAT MATTER</p><h2>Under the <em>hood.</em></h2></div><External href={linkedin}>Credentials on LinkedIn</External></div><div className="certificate-list">{[{ title: 'Introduction to Microprocessors', tag: 'COMPUTER ARCHITECTURE', icon: Cpu }, { title: 'Operating Systems and You: Becoming a Power User', tag: 'OPERATING SYSTEMS', icon: Code2 }, { title: 'The Bits and Bytes of Computer Networking', tag: 'NETWORKING', icon: Workflow }].map(({ title, tag, icon: Icon }, i) => <External key={title} href={linkedin} className="certificate"><span className="certificate-icon"><Icon size={25} strokeWidth={1.3} /></span><div><span className="mono">0{i + 1} / {tag}</span><h3>{title}</h3></div></External>)}</div></section>
+      <section className="contact-section" id="contact"><div className="contact-orbit" aria-hidden="true" /><div className="wrap"><p className="eyebrow"><span className="signal-dot" /> 05 / OPEN A CONVERSATION</p><h2>Got a wild idea?<br /><em>Let’s make it work.</em></h2><div className="contact-bottom"><p>A project, a learning opportunity, or a tricky<br className="desktop-break" /> problem worth figuring out. I’m listening.</p><div><External href={linkedin} className="primary-button"><Linkedin size={18} />Let’s connect</External><External href={github} className="contact-github"><Github size={18} />GitHub</External></div></div></div></section>
+    </main><footer className="site-footer wrap"><a className="wordmark" href="#home" aria-label="Back to top">a<span>/</span></a><span className="mono">© {new Date().getFullYear()} AMEYA AGARWAL · BUILT WITH CURIOSITY.</span><a href="#home" className="mono">BACK TO TOP <ArrowUpRight size={14} /></a></footer>
+  </div>;
 }
