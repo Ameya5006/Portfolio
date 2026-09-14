@@ -18,7 +18,7 @@ jobs:
       matrix:
         preset: [mobile, desktop]
     env:
-      LHCI_PRESET: ${{ matrix.preset }}
+      AUDIT_FORM_FACTOR: ${{ matrix.preset }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
