@@ -86,24 +86,24 @@
 /* Site-wide topographic data-flow background */
 .ambient-background{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 48% 28%,#111b22 0,#090e13 43%,#080b0f 78%)}
 .site-header,main,.site-footer{position:relative;z-index:1}
-.ambient-flow{position:absolute;inset:-12%;width:124%;height:124%;opacity:.28;overflow:visible}
-.ambient-flow path{fill:none;vector-effect:non-scaling-stroke;stroke-width:1}
-.flow-bank-a{animation:flow-bank-a 27s ease-in-out infinite alternate;transform-origin:center}
-.flow-bank-b{animation:flow-bank-b 34s ease-in-out infinite alternate;transform-origin:center}
-.flow-bank-a path{stroke:url(#ambient-cyan-flow);stroke-dasharray:3 13;animation:flow-current 32s linear infinite}
-.flow-bank-b path{stroke:url(#ambient-red-flow);stroke-dasharray:2 18;animation:flow-current-reverse 40s linear infinite}
+.ambient-flow{position:absolute;inset:-12%;width:124%;height:124%;opacity:.56;overflow:visible}
+.ambient-flow path{fill:none;vector-effect:non-scaling-stroke;stroke-width:1.35}
+.flow-bank-a{animation:flow-bank-a 17s ease-in-out infinite alternate;transform-origin:center}
+.flow-bank-b{animation:flow-bank-b 22s ease-in-out infinite alternate;transform-origin:center}
+.flow-bank-a path{stroke:url(#ambient-cyan-flow);stroke-dasharray:6 12;animation:flow-current 18s linear infinite}
+.flow-bank-b path{stroke:url(#ambient-red-flow);stroke-dasharray:5 16;animation:flow-current-reverse 23s linear infinite}
 .flow-bank path:nth-child(2){opacity:.78;animation-delay:-7s}.flow-bank path:nth-child(3){opacity:.6;animation-delay:-14s}.flow-bank path:nth-child(4){opacity:.45;animation-delay:-21s}.flow-bank path:nth-child(5){opacity:.32;animation-delay:-28s}
-.flow-haze{position:absolute;display:block;width:72vw;height:1px;opacity:.36;transform-origin:center;will-change:transform}
+.flow-haze{position:absolute;display:block;width:78vw;height:2px;opacity:.62;transform-origin:center;will-change:transform}
 .flow-haze:after{content:'';position:absolute;left:38%;top:-3px;width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 18px currentColor}
-.flow-haze.haze-a{left:-25vw;top:28%;color:#76f8ed;background:linear-gradient(90deg,transparent,#76f8ed3d,transparent);transform:rotate(-16deg);animation:signal-sweep-a 24s ease-in-out infinite}
-.flow-haze.haze-b{right:-30vw;top:69%;color:#ff5b64;background:linear-gradient(90deg,transparent,#ff5b6435,transparent);transform:rotate(13deg);animation:signal-sweep-b 31s ease-in-out infinite}
-.stack-section{background:#0d1218ee}
-.contact-section{background:#101920f0}
+.flow-haze.haze-a{left:-25vw;top:28%;color:#76f8ed;background:linear-gradient(90deg,transparent,#76f8ed3d,transparent);transform:rotate(-16deg);animation:signal-sweep-a 15s ease-in-out infinite}
+.flow-haze.haze-b{right:-30vw;top:69%;color:#ff5b64;background:linear-gradient(90deg,transparent,#ff5b6435,transparent);transform:rotate(13deg);animation:signal-sweep-b 19s ease-in-out infinite}
+.stack-section{background:#0d1218d9}
+.contact-section{background:#101920df}
 @keyframes flow-current{to{stroke-dashoffset:-210}}
 @keyframes flow-current-reverse{to{stroke-dashoffset:240}}
 @keyframes flow-bank-a{0%{transform:translate3d(-3%,2%,0) scale(1)}100%{transform:translate3d(4%,-4%,0) scale(1.05)}}
 @keyframes flow-bank-b{0%{transform:translate3d(2%,-2%,0) scale(1.04)}100%{transform:translate3d(-5%,5%,0) scale(.98)}}
 @keyframes signal-sweep-a{0%,12%{transform:translate3d(-35vw,0,0) rotate(-16deg);opacity:0}32%{opacity:.32}58%,100%{transform:translate3d(125vw,18vh,0) rotate(-16deg);opacity:0}}
 @keyframes signal-sweep-b{0%,35%{transform:translate3d(38vw,0,0) rotate(13deg);opacity:0}55%{opacity:.26}82%,100%{transform:translate3d(-120vw,-14vh,0) rotate(13deg);opacity:0}}
-@media(max-width:760px){.ambient-flow{inset:-20%;width:140%;height:140%;opacity:.2}.flow-haze{opacity:.24}.flow-bank-a path{stroke-dasharray:2 17}.flow-bank-b path{stroke-dasharray:2 22}}
+@media(max-width:760px){.ambient-flow{inset:-20%;width:140%;height:140%;opacity:.4}.flow-haze{opacity:.38}.flow-bank-a path{stroke-dasharray:2 17}.flow-bank-b path{stroke-dasharray:2 22}}
 @media(prefers-reduced-motion:reduce){.ambient-flow .flow-bank,.ambient-flow path,.flow-haze{animation:none!important}}
