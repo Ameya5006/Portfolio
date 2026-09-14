@@ -192,38 +192,21 @@ export default function HomePage() {
   const visibleProjects = projects.filter(project => filter === 'All' || (filter === 'Web' ? ['gym', 'palm'].includes(project.id) : ['amedic', 'ocean'].includes(project.id)));
   return <div className={`portfolio ${motion ? 'motion-on' : 'motion-off'}`}>
     <div className="ambient-background" aria-hidden="true">
-      <svg className="ambient-flow" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="ambient-cyan-flow" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#76f8ed" stopOpacity="0" />
-            <stop offset=".32" stopColor="#76f8ed" stopOpacity=".62" />
-            <stop offset=".7" stopColor="#76f8ed" stopOpacity=".24" />
-            <stop offset="1" stopColor="#76f8ed" stopOpacity="0" />
-          </linearGradient>
-          <linearGradient id="ambient-red-flow" x1="1" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#ff5b64" stopOpacity="0" />
-            <stop offset=".4" stopColor="#ff5b64" stopOpacity=".5" />
-            <stop offset=".76" stopColor="#ff5b64" stopOpacity=".2" />
-            <stop offset="1" stopColor="#ff5b64" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <g className="flow-bank flow-bank-a">
-          <path d="M-180 170 C130 20 350 315 665 165 S1160 45 1780 255" />
-          <path d="M-190 205 C120 55 360 350 680 200 S1180 80 1790 290" />
-          <path d="M-200 240 C110 90 370 385 695 235 S1200 115 1800 325" />
-          <path d="M-210 275 C100 125 380 420 710 270 S1220 150 1810 360" />
-          <path d="M-220 310 C90 160 390 455 725 305 S1240 185 1820 395" />
-        </g>
-        <g className="flow-bank flow-bank-b">
-          <path d="M-120 700 C220 465 430 835 760 620 S1240 455 1740 650" />
-          <path d="M-135 735 C205 500 445 870 775 655 S1255 490 1755 685" />
-          <path d="M-150 770 C190 535 460 905 790 690 S1270 525 1770 720" />
-          <path d="M-165 805 C175 570 475 940 805 725 S1285 560 1785 755" />
-          <path d="M-180 840 C160 605 490 975 820 760 S1300 595 1800 790" />
-        </g>
-      </svg>
-      <span className="flow-haze haze-a" />
-      <span className="flow-haze haze-b" />
+      <span className="ambient-code-mark mark-left">{'{'}</span>
+      <span className="ambient-code-mark mark-right">{'}'}</span>
+      <div className="code-drift-field">
+        <i className="code-glyph glyph-1">{'</>'}</i>
+        <i className="code-glyph glyph-2">AI</i>
+        <i className="code-glyph glyph-3">C++</i>
+        <i className="code-glyph glyph-4">API</i>
+        <i className="code-glyph glyph-5">{'{}'}</i>
+        <i className="code-glyph glyph-6">git</i>
+        <i className="code-glyph glyph-7">ML</i>
+        <i className="code-glyph glyph-8">01</i>
+        <i className="code-glyph glyph-9">DART</i>
+        <i className="code-glyph glyph-10">{'[]'}</i>
+      </div>
+      <span className="code-scanline" />
     </div>
     {intro && <div className="intro-screen" role="status" aria-label="Ameya portfolio introduction"><div className="intro-logo">a<span>/</span></div><p className="mono">IDEAS INTO INTERFACES.</p><div className="intro-line" /><button onClick={() => setIntro(false)} aria-label="Skip introduction"><X size={16} /> Skip intro</button></div>}
     <a className="skip-link" href="#work">Skip to projects</a><div className="reading-progress" style={{ transform: `scaleX(${progress})` }} />
