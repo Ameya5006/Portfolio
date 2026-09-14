@@ -191,6 +191,7 @@ export default function HomePage() {
   }, []);
   const visibleProjects = projects.filter(project => filter === 'All' || (filter === 'Web' ? ['gym', 'palm'].includes(project.id) : ['amedic', 'ocean'].includes(project.id)));
   return <div className={`portfolio ${motion ? 'motion-on' : 'motion-off'}`}>
+    <div className="ambient-background" aria-hidden="true"><i className="ambient-glow glow-cyan" /><i className="ambient-glow glow-red" /><i className="ambient-glow glow-violet" /><span className="ambient-grid" /><span className="ambient-stars" /></div>
     {intro && <div className="intro-screen" role="status" aria-label="Ameya portfolio introduction"><div className="intro-logo">a<span>/</span></div><p className="mono">IDEAS INTO INTERFACES.</p><div className="intro-line" /><button onClick={() => setIntro(false)} aria-label="Skip introduction"><X size={16} /> Skip intro</button></div>}
     <a className="skip-link" href="#work">Skip to projects</a><div className="reading-progress" style={{ transform: `scaleX(${progress})` }} />
     <header className="site-header wrap"><a className="wordmark" href="#home" aria-label="Ameya home">a<span>/</span><small>AMEYA AGARWAL</small></a><span className="header-status mono"><i /> BUILDER. STILL CURIOUS.</span><External href={linkedin} className="header-connect">Let’s talk <MessageCircle size={16} /></External></header>
