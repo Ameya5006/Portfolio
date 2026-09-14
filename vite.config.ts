@@ -7,10 +7,10 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes("node_modules/lucide-react")) return "icons";
+          if (id.indexOf("node_modules/lucide-react") !== -1) return "icons";
           if (
-            id.includes("node_modules/react") ||
-            id.includes("node_modules/scheduler")
+            id.indexOf("node_modules/react") !== -1 ||
+            id.indexOf("node_modules/scheduler") !== -1
           ) return "react";
         },
       },
