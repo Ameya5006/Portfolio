@@ -192,21 +192,14 @@ export default function HomePage() {
   const visibleProjects = projects.filter(project => filter === 'All' || (filter === 'Web' ? ['gym', 'palm'].includes(project.id) : ['amedic', 'ocean'].includes(project.id)));
   return <div className={`portfolio ${motion ? 'motion-on' : 'motion-off'}`}>
     <div className="ambient-background" aria-hidden="true">
-      <span className="ambient-code-mark mark-left">{'{'}</span>
-      <span className="ambient-code-mark mark-right">{'}'}</span>
-      <div className="code-drift-field">
-        <i className="code-glyph glyph-1">{'</>'}</i>
-        <i className="code-glyph glyph-2">AI</i>
-        <i className="code-glyph glyph-3">C++</i>
-        <i className="code-glyph glyph-4">API</i>
-        <i className="code-glyph glyph-5">{'{}'}</i>
-        <i className="code-glyph glyph-6">git</i>
-        <i className="code-glyph glyph-7">ML</i>
-        <i className="code-glyph glyph-8">01</i>
-        <i className="code-glyph glyph-9">DART</i>
-        <i className="code-glyph glyph-10">{'[]'}</i>
+      <div className="ambient-silk">
+        <span className="satin-fold fold-one" />
+        <span className="satin-fold fold-two" />
+        <span className="satin-fold fold-three" />
+        <span className="satin-highlight" />
       </div>
-      <span className="code-scanline" />
+      <span className="ambient-vignette" />
+      <span className="ambient-grain" />
     </div>
     {intro && <div className="intro-screen" role="status" aria-label="Ameya portfolio introduction"><div className="intro-logo">a<span>/</span></div><p className="mono">IDEAS INTO INTERFACES.</p><div className="intro-line" /><button onClick={() => setIntro(false)} aria-label="Skip introduction"><X size={16} /> Skip intro</button></div>}
     <a className="skip-link" href="#work">Skip to projects</a><div className="reading-progress" style={{ transform: `scaleX(${progress})` }} />
