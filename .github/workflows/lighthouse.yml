@@ -1,0 +1,35 @@
+name: Lighthouse audit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: ${{ matrix.preset }} audit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [mobile, desktop]
+    env:
+      LHCI_PRESET: ${{ matrix.preset }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Build production site
+        run: npm run build
+      - name: Run Lighthouse CI
+        run: npx --yes @lhci/cli@0.15.x autorun --config=lighthouserc.cjs
