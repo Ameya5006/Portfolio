@@ -58,97 +58,100 @@ function ProjectVisual({ id }: { id: string }) {
 }
 
 
-function DevRunner({ motion }: { motion: boolean }) {
-  const [jumping, setJumping] = useState(false);
-  const [records, setRecords] = useState(128);
-  const [dodged, setDodged] = useState(7);
-  const [status, setStatus] = useState('PIPELINE RUNNING');
+const buildSystems = [
+  { id: 'web', label: 'WEB SYSTEMS', detail: 'React + Node', status: 'FULL-STACK PRODUCTS', icon: Braces },
+  { id: 'mobile', label: 'FLUTTER APPS', detail: 'Dart + Mobile', status: 'MOBILE EXPERIENCES', icon: Smartphone },
+  { id: 'ai', label: 'AI / ML LAB', detail: 'Python + Models', status: 'INTELLIGENT WORKFLOWS', icon: Sparkles },
+  { id: 'automation', label: 'AUTOMATION', detail: 'APIs + Firebase', status: 'CONNECTED SYSTEMS', icon: Workflow },
+];
 
-  useEffect(() => {
-    if (!jumping) return;
-    const timer = window.setTimeout(() => {
-      setJumping(false);
-      setStatus('BUILD CONTINUES');
-    }, 680);
-    return () => window.clearTimeout(timer);
-  }, [jumping]);
+function BuildConstellation({ motion }: { motion: boolean }) {
+  const [focus, setFocus] = useState(0);
+  const selected = buildSystems[focus];
 
   useEffect(() => {
     if (!motion) return;
-    const messages = ['COMMIT CAPTURED', 'MODEL CHECKPOINT SAVED', 'TESTS PASSED', 'RECORD UNLOCKED'];
-    let message = 0;
     const timer = window.setInterval(() => {
-      setRecords(value => value + 1);
-      setStatus(messages[message++ % messages.length]);
-    }, 3200);
+      setFocus(value => (value + 1) % buildSystems.length);
+    }, 2600);
     return () => window.clearInterval(timer);
   }, [motion]);
 
-  const jump = () => {
-    if (!motion || jumping) return;
-    setJumping(true);
-    setDodged(value => value + 1);
-    setStatus('ERROR DODGED');
-  };
-
   return <div
-    className={'dev-runner' + (jumping ? ' is-jumping' : '')}
-    role="button"
-    tabIndex={0}
-    aria-label="Debug Runner. Tap or press Space to help the developer bot jump over an error."
-    onClick={jump}
-    onKeyDown={event => {
-      if (event.key === ' ' || event.key === 'ArrowUp') {
-        event.preventDefault();
-        jump();
-      }
+    className="build-constellation"
+    aria-label="Interactive map of Ameya's technical systems"
+    onPointerMove={event => {
+      if (!motion) return;
+      const rect = event.currentTarget.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width - .5) * 2;
+      const y = ((event.clientY - rect.top) / rect.height - .5) * 2;
+      event.currentTarget.style.setProperty('--mx', (x * 16).toFixed(1) + 'px');
+      event.currentTarget.style.setProperty('--my', (y * 12).toFixed(1) + 'px');
+    }}
+    onPointerLeave={event => {
+      event.currentTarget.style.setProperty('--mx', '0px');
+      event.currentTarget.style.setProperty('--my', '0px');
     }}
   >
-    <div className="runner-frame">
-      <div className="runner-hud mono">
-        <span><b>AM/</b>DEV.RUN</span>
-        <div className="runner-hud-data">
-          <span>RECORDS <b>{String(records).padStart(3, '0')}</b></span>
-          <span>DODGED <b>{String(dodged).padStart(2, '0')}</b></span>
-        </div>
+    <div className="constellation-stage">
+      <div className="constellation-topline">
+        <span>AMEYA.SYSTEMS / LIVE MAP</span>
+        <b>04 MODULES · 01 BUILDER</b>
       </div>
 
-      <div className="runner-world" aria-hidden="true">
-        <div className="runner-sun" />
-        <div className="runner-code-rain">
-          <span>01 10 11</span><span>BUILD()</span><span>AI/ML</span><span>SHIP→</span>
-        </div>
-        <div className="runner-checkpoint"><i /> NEXT CHECKPOINT / PRODUCTION</div>
+      <svg className="constellation-map" viewBox="0 0 620 540" aria-hidden="true">
+        <path d="M310 270 C245 205 180 160 110 112" />
+        <path d="M310 270 C380 205 442 160 510 115" />
+        <path d="M310 270 C232 322 174 375 105 425" />
+        <path d="M310 270 C386 324 445 378 515 425" />
+        <path d="M110 112 C250 55 374 55 510 115" />
+        <path d="M105 425 C245 485 380 485 515 425" />
+        <circle cx="310" cy="270" r="72" />
+        <circle cx="310" cy="270" r="122" />
+        <circle className="map-pulse" cx="110" cy="112" r="4" />
+        <circle className="map-pulse" cx="510" cy="115" r="4" />
+        <circle className="map-pulse" cx="105" cy="425" r="4" />
+        <circle className="map-pulse" cx="515" cy="425" r="4" />
+      </svg>
 
-        <div className="runner-character">
-          <i className="runner-antenna" />
-          <div className="runner-head"><i /><b>AMEYA</b></div>
-          <i className="runner-arm left" />
-          <i className="runner-arm right" />
-          <div className="runner-body"><Code2 size={21} strokeWidth={1.6} /></div>
-          <i className="runner-leg left" />
-          <i className="runner-leg right" />
-          <span className="runner-trail" />
-        </div>
+      <div className="constellation-ring ring-one" aria-hidden="true" />
+      <div className="constellation-ring ring-two" aria-hidden="true" />
+      <div className="constellation-ring ring-three" aria-hidden="true" />
 
-        <div className="runner-error error-one">
-          <X size={18} /><b>TYPE_ERR</b><small>FIX OR JUMP</small>
-        </div>
-        <div className="runner-error error-two">
-          <X size={14} /><b>404</b>
-        </div>
-        <div className="runner-token">
-          <Check size={19} /><span>COMMIT</span>
-        </div>
+      <div className="constellation-core" aria-hidden="true">
+        <span className="core-mark">a<i>/</i></span>
+        <b>AMEYA.SYSTEMS</b>
+        <small>IDEA → PRODUCT</small>
       </div>
 
-      <div className="runner-console mono">
-        <span aria-live="polite">› {motion ? status : 'MOTION PAUSED'}</span>
-        <b>[ SPACE / TAP ] JUMP</b>
+      {buildSystems.map((item, index) => {
+        const Icon = item.icon;
+        return <button
+          type="button"
+          className={'constellation-node node-' + item.id + (focus === index ? ' active' : '')}
+          key={item.id}
+          aria-pressed={focus === index}
+          onPointerEnter={() => setFocus(index)}
+          onFocus={() => setFocus(index)}
+          onClick={() => setFocus(index)}
+        >
+          <span><Icon size={16} strokeWidth={1.5} /></span>
+          <b>{item.label}</b>
+          <small>{item.detail}</small>
+        </button>;
+      })}
+
+      <span className="constellation-chip chip-one">01 / INPUT</span>
+      <span className="constellation-chip chip-two">03 / SHIP</span>
+      <span className="constellation-chip chip-three">02 / BUILD</span>
+
+      <div className="constellation-status" aria-live="polite">
+        <span><i /> SYSTEM FOCUS</span>
+        <b>{selected.status}</b>
       </div>
     </div>
-    <span className="runner-caption mono"><i /> DEBUG THE PATH. SHIP THE WIN.</span>
-    <span className="runner-side-label">FULL-STACK · FLUTTER · AI/ML</span>
+    <span className="constellation-caption"><i /> MOVE THROUGH THE SYSTEM. FIND THE CONNECTIONS.</span>
+    <span className="constellation-side">WEB · MOBILE · AI/ML · AUTOMATION</span>
   </div>;
 }
 
@@ -193,7 +196,7 @@ export default function HomePage() {
     <header className="site-header wrap"><a className="wordmark" href="#home" aria-label="Ameya home">a<span>/</span><small>AMEYA AGARWAL</small></a><span className="header-status mono"><i /> BUILDER. STILL CURIOUS.</span><External href={linkedin} className="header-connect">Let’s talk <MessageCircle size={16} /></External></header>
     <nav className="section-dock" aria-label="Section navigation">{navigation.map(({ id, label, icon: Icon }) => <a href={`#${id}`} key={id} aria-label={label} aria-current={active === id ? 'location' : undefined}><Icon size={18} strokeWidth={1.6} /><span>{label}</span></a>)}<div className="dock-divider" /><button onClick={() => setMotion(!motion)} aria-label={motion ? 'Pause animations' : 'Enable animations'} aria-pressed={motion}>{motion ? <Pause size={16} /> : <Play size={16} />}<span>{motion ? 'Pause motion' : 'Enable motion'}</span></button></nav>
     <main>
-      <section className="hero wrap" id="home"><div className="hero-backdrop" aria-hidden="true" /><div className="hero-copy"><p className="eyebrow"><span className="signal-dot" /> </p><h1 className="hero-name">AMEYA<br /><span>AGARWAL.</span></h1><h2 className="hero-manifesto">Curiosity · Code · <em>A little chaos.</em></h2><p className="hero-description">I turn everyday friction into <strong>full-stack products</strong>, <strong>Flutter apps</strong> and useful automation.</p><div className="hero-actions"><a className="primary-button" href="#work">Enter the playground <ArrowDown size={17} /></a><a href="/Ameya_Agarwal_resume.pdf" target="_blank" rel="noopener noreferrer" className="resume-button">View Résumé <ArrowUpRight size={16} /><span className="sr-only"> (opens PDF in a new tab)</span></a><External href={github} className="icon-link"><Github size={19} /><span className="sr-only">GitHub</span></External><External href={linkedin} className="icon-link"><Linkedin size={18} /><span className="sr-only">LinkedIn</span></External></div><p className="hero-footnote mono">B.TECH CSE · 2024—2028 <span>↗</span> BENNETT UNIVERSITY</p></div><DevRunner motion={motion} /><div className="hero-baseline"><span className="mono">CURRENT QUEST <b>AI / ML + DSA</b></span><a href="#work" className="mono">SCROLL INTO THE GOOD STUFF <ArrowDown size={15} /></a></div></section>
+      <section className="hero wrap" id="home"><div className="hero-backdrop" aria-hidden="true" /><div className="hero-copy"><p className="eyebrow"><span className="signal-dot" /> </p><h1 className="hero-name">AMEYA<br /><span>AGARWAL.</span></h1><h2 className="hero-manifesto">Curiosity · Code · <em>A little chaos.</em></h2><p className="hero-description">I turn everyday friction into <strong>full-stack products</strong>, <strong>Flutter apps</strong> and useful automation.</p><div className="hero-actions"><a className="primary-button" href="#work">Enter the playground <ArrowDown size={17} /></a><a href="/Ameya_Agarwal_resume.pdf" target="_blank" rel="noopener noreferrer" className="resume-button">View Résumé <ArrowUpRight size={16} /><span className="sr-only"> (opens PDF in a new tab)</span></a><External href={github} className="icon-link"><Github size={19} /><span className="sr-only">GitHub</span></External><External href={linkedin} className="icon-link"><Linkedin size={18} /><span className="sr-only">LinkedIn</span></External></div><p className="hero-footnote mono">B.TECH CSE · 2024—2028 <span>↗</span> BENNETT UNIVERSITY</p></div><BuildConstellation motion={motion} /><div className="hero-baseline"><span className="mono">CURRENT QUEST <b>AI / ML + DSA</b></span><a href="#work" className="mono">SCROLL INTO THE GOOD STUFF <ArrowDown size={15} /></a></div></section>
       <div className="ticker" aria-hidden="true"><div className="ticker-track">{[0, 1].map(i => <div key={i}><span>THINK IT</span><b>↗</b><span className="outline">BUILD IT</span><b>✳</b><span>BREAK IT</span><b>↗</b><span className="outline">MAKE IT BETTER</span><b>✳</b></div>)}</div></div>
       <section className="work-section wrap section-space" id="work"><div className="section-heading"><div><p className="eyebrow">01 / SELECTED PROJECTS</p><h2>Built for <em>real life.</em></h2></div><p>Four builds. Different problems.<br />The same itch to make things work.</p></div><div className="project-toolbar"><div className="filter-group" aria-label="Filter projects">{['All', 'Web', 'Flutter'].map(item => <button key={item} aria-pressed={filter === item} onClick={() => setFilter(item)}>{item}<span>{item === 'All' ? '04' : '02'}</span></button>)}</div><span className="mono project-hint">A TOUR THROUGH THE BUILDS ↓</span></div><div className="project-list">{visibleProjects.map(project => <article className={`project-story story-${project.id}`} key={project.id}><ProjectVisual id={project.id} /><div className="project-copy"><div className="project-kicker mono"><span>{project.category}</span><span>/{project.number}</span></div><h3>{project.title}<span>{project.id === 'ocean' ? ' / ARGO Mobile' : ''}</span></h3><h4>{project.headline.split('\n').map((line, i) => <span key={line}>{line}{i === 0 && <br />}</span>)}</h4><p>{project.description}</p><ul className="project-highlights">{project.highlights.map(item => <li key={item}><Check size={14} />{item}</li>)}</ul><div className="tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div><details className="technical-details"><summary>Full technical stack <span>+</span></summary><p>{project.detail}</p></details><div className="project-links">{project.live && <External href={project.live} className="project-live">Open project</External>}<External href={`${github}${project.repo}`}><Github size={15} />Code</External></div></div></article>)}</div><div className="work-footer"><span className="mono">MORE EXPERIMENTS. MORE SIDE QUESTS.</span><External href={`${github}?tab=repositories`}>All repositories</External></div></section>
       <section className="stack-section section-space" id="stack"><div className="wrap"><div className="section-heading"><div><p className="eyebrow">02 / THE TOOLKIT</p><h2>Many tools.<br /><em>One curious mind.</em></h2></div><div className="stack-symbol" aria-hidden="true"><Cpu size={68} strokeWidth={.8} /></div></div><article className="ai-focus"><div className="ai-focus-visual" aria-hidden="true"><span /><span /><span /><span /><span /><i /><i /><i /></div><div><span className="mono">CURRENT FOCUS / AI + MACHINE LEARNING</span><h3>Learning how systems <em>learn.</em></h3><p>Working through the ML pipeline—from data preparation and feature engineering to training, evaluation, deployment and monitoring.</p><div className="ai-tags"><span>Python</span><span>NumPy</span><span>pandas</span><span>scikit-learn</span><span>MLOps</span></div></div></article><div className="toolkit-layout"><div className="toolkit-filters" aria-label="Technology categories">{toolkit.map((group, i) => <button key={group.title} aria-pressed={toolGroup === i} aria-controls="toolkit-panel" onClick={() => setToolGroup(i)}><span className="mono">0{i + 1}</span>{group.title}<ArrowUpRight size={16} /></button>)}</div><div className="toolkit-panel" id="toolkit-panel"><span className="mono">TOOLS I’VE WORKED WITH / 0{toolGroup + 1}</span><h3>{toolkit[toolGroup].title}<span>_</span></h3><div className="tech-cloud" key={toolGroup}>{toolkit[toolGroup].items.map((item, i) => <span key={item} style={{ animationDelay: `${i * 25}ms` }}>{item}</span>)}</div><p>No proficiency bars. Just tools behind the things I build.</p></div></div></div></section>
