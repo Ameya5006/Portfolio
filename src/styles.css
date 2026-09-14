@@ -83,21 +83,23 @@
 @media(max-width:370px){.constellation-node{width:91px}.constellation-core{width:110px}.core-mark{font-size:41px}.constellation-status{width:72%}}
 
 
-/* Subtle site-wide ambient background */
-.ambient-background{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#080b0f}
+/* Lightweight site-wide blueprint background */
+.ambient-background{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(circle at 18% 16%,#12323742 0,transparent 28%),radial-gradient(circle at 84% 68%,#31192130 0,transparent 30%),linear-gradient(145deg,#080b0f,#090e13 55%,#080b0f)}
 .site-header,main,.site-footer{position:relative;z-index:1}
-.ambient-glow{position:absolute;display:block;border-radius:50%;filter:blur(105px);opacity:.58;will-change:transform}
-.ambient-glow.glow-cyan{width:46vw;height:46vw;min-width:420px;min-height:420px;left:-20vw;top:-18vw;background:radial-gradient(circle,#2ce0d72a 0,#147f8620 35%,transparent 72%);animation:ambient-cyan 28s ease-in-out infinite alternate}
-.ambient-glow.glow-red{width:43vw;height:43vw;min-width:390px;min-height:390px;right:-19vw;top:32vh;background:radial-gradient(circle,#ff33451f 0,#861f3020 38%,transparent 72%);animation:ambient-red 33s ease-in-out infinite alternate}
-.ambient-glow.glow-violet{width:38vw;height:38vw;min-width:350px;min-height:350px;left:34vw;bottom:-24vw;background:radial-gradient(circle,#7157d516 0,#37277412 42%,transparent 73%);animation:ambient-violet 38s ease-in-out infinite alternate}
-.ambient-grid{position:absolute;inset:-15%;display:block;background-image:linear-gradient(#76f8ed09 1px,transparent 1px),linear-gradient(90deg,#76f8ed09 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse at center,#000 3%,transparent 72%);opacity:.48;transform:perspective(900px) rotateX(62deg) translateY(18%);transform-origin:center bottom;animation:ambient-grid-drift 32s linear infinite}
-.ambient-stars{position:absolute;inset:-8%;display:block;opacity:.38;background-image:radial-gradient(circle at 8% 17%,#76f8ed 0 1px,transparent 2px),radial-gradient(circle at 19% 67%,#fff 0 1px,transparent 1.8px),radial-gradient(circle at 31% 34%,#76f8ed 0 1px,transparent 2px),radial-gradient(circle at 43% 82%,#ff6670 0 1px,transparent 2px),radial-gradient(circle at 57% 13%,#fff 0 1px,transparent 1.8px),radial-gradient(circle at 68% 57%,#76f8ed 0 1px,transparent 2px),radial-gradient(circle at 78% 27%,#ff6670 0 1px,transparent 2px),radial-gradient(circle at 91% 74%,#76f8ed 0 1px,transparent 2px);background-size:330px 290px;animation:ambient-stars-drift 45s linear infinite}
-.stack-section{background:#0d1218e9}
-.contact-section{background:#101920ed}
-@keyframes ambient-cyan{0%{transform:translate3d(0,0,0) scale(1)}55%{transform:translate3d(18vw,13vh,0) scale(1.08)}100%{transform:translate3d(9vw,39vh,0) scale(.92)}}
-@keyframes ambient-red{0%{transform:translate3d(0,0,0) scale(.94)}50%{transform:translate3d(-18vw,-14vh,0) scale(1.08)}100%{transform:translate3d(-8vw,24vh,0) scale(1)}}
-@keyframes ambient-violet{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(-15vw,-28vh,0) scale(1.12)}}
-@keyframes ambient-grid-drift{to{background-position:72px 72px,72px 72px}}
-@keyframes ambient-stars-drift{to{transform:translate3d(-80px,55px,0)}}
-@media(max-width:760px){.ambient-glow{filter:blur(78px);opacity:.45}.ambient-grid{background-size:58px 58px;opacity:.35}.ambient-stars{opacity:.27;background-size:250px 230px}}
-@media(prefers-reduced-motion:reduce){.ambient-glow,.ambient-grid,.ambient-stars{animation:none!important}}
+.ambient-grid{position:absolute;inset:-12%;display:block;background-image:linear-gradient(#76f8ed0a 1px,transparent 1px),linear-gradient(90deg,#76f8ed0a 1px,transparent 1px),linear-gradient(135deg,transparent 49.7%,#ff5b6408 50%,transparent 50.3%);background-size:86px 86px,86px 86px,240px 240px;opacity:.6;animation:blueprint-drift 55s linear infinite}
+.ambient-stars{position:absolute;inset:0;display:block;opacity:.34;background-image:radial-gradient(circle at 7% 15%,#76f8ed 0 1px,transparent 2px),radial-gradient(circle at 18% 71%,#b9cbd2 0 1px,transparent 1.7px),radial-gradient(circle at 29% 36%,#76f8ed 0 1px,transparent 2px),radial-gradient(circle at 42% 88%,#ff6972 0 1px,transparent 2px),radial-gradient(circle at 56% 11%,#b9cbd2 0 1px,transparent 1.7px),radial-gradient(circle at 67% 59%,#76f8ed 0 1px,transparent 2px),radial-gradient(circle at 79% 29%,#ff6972 0 1px,transparent 2px),radial-gradient(circle at 92% 78%,#76f8ed 0 1px,transparent 2px);background-size:390px 330px;animation:blueprint-points 12s ease-in-out infinite alternate}
+.ambient-glow{position:absolute;display:block;border-radius:50%;opacity:.34;will-change:transform}
+.ambient-glow:before,.ambient-glow:after{content:'';position:absolute;border:inherit;border-radius:inherit}
+.ambient-glow:before{inset:42px;opacity:.62}.ambient-glow:after{inset:88px;opacity:.36}
+.ambient-glow.glow-cyan{width:560px;height:560px;left:-285px;top:12%;border:1px solid #76f8ed25;animation:blueprint-orbit-left 34s ease-in-out infinite alternate}
+.ambient-glow.glow-red{width:510px;height:510px;right:-270px;top:48%;border:1px solid #ff5b6420;animation:blueprint-orbit-right 39s ease-in-out infinite alternate}
+.ambient-glow.glow-violet{width:390px;height:390px;left:56%;bottom:-270px;border:1px dashed #8c75ff16;animation:blueprint-orbit-center 46s linear infinite}
+.stack-section{background:#0d1218f0}
+.contact-section{background:#101920f2}
+@keyframes blueprint-drift{to{background-position:86px 86px,86px 86px,240px 240px}}
+@keyframes blueprint-points{0%{opacity:.22}100%{opacity:.42}}
+@keyframes blueprint-orbit-left{to{transform:translate3d(90px,120px,0) rotate(28deg)}}
+@keyframes blueprint-orbit-right{to{transform:translate3d(-105px,-90px,0) rotate(-32deg)}}
+@keyframes blueprint-orbit-center{to{transform:rotate(360deg)}}
+@media(max-width:760px){.ambient-grid{background-size:68px 68px,68px 68px,190px 190px;opacity:.42}.ambient-stars{opacity:.24;background-size:290px 270px}.ambient-glow{opacity:.25}.ambient-glow.glow-cyan{width:390px;height:390px;left:-245px}.ambient-glow.glow-red{width:360px;height:360px;right:-235px}}
+@media(prefers-reduced-motion:reduce){.ambient-grid,.ambient-stars,.ambient-glow{animation:none!important}}
