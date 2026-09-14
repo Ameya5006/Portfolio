@@ -1,4 +1,4 @@
-const desktop = process.env.LHCI_PRESET === "desktop";
+const desktop = process.env.AUDIT_FORM_FACTOR === "desktop";
 
 module.exports = {
   ci: {
