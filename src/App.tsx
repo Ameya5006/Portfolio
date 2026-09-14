@@ -196,14 +196,14 @@ export default function HomePage() {
         <defs>
           <linearGradient id="ambient-cyan-flow" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="#76f8ed" stopOpacity="0" />
-            <stop offset=".32" stopColor="#76f8ed" stopOpacity=".34" />
-            <stop offset=".7" stopColor="#76f8ed" stopOpacity=".1" />
+            <stop offset=".32" stopColor="#76f8ed" stopOpacity=".62" />
+            <stop offset=".7" stopColor="#76f8ed" stopOpacity=".24" />
             <stop offset="1" stopColor="#76f8ed" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="ambient-red-flow" x1="1" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#ff5b64" stopOpacity="0" />
-            <stop offset=".4" stopColor="#ff5b64" stopOpacity=".25" />
-            <stop offset=".76" stopColor="#ff5b64" stopOpacity=".08" />
+            <stop offset=".4" stopColor="#ff5b64" stopOpacity=".5" />
+            <stop offset=".76" stopColor="#ff5b64" stopOpacity=".2" />
             <stop offset="1" stopColor="#ff5b64" stopOpacity="0" />
           </linearGradient>
         </defs>
