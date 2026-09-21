@@ -112,3 +112,12 @@
 .project-story{content-visibility:auto;contain-intrinsic-size:auto 760px}
 @media(max-width:760px){.project-story{contain-intrinsic-size:auto 1180px}}
 @media(prefers-reduced-data:reduce){.ambient-grain,.satin-highlight{display:none}.satin-fold{animation:none!important}}
+
+
+/* Hero name: solid first name + architectural outline surname */
+.hero .hero-name{display:flex;flex-direction:column;align-items:flex-start;width:max-content;max-width:none;font-size:clamp(76px,8.2vw,120px);line-height:.78;letter-spacing:-7px;font-weight:700;text-wrap:nowrap}
+.hero .hero-name>.hero-name-solid{display:block;font-size:1em;line-height:.82;letter-spacing:-7px;color:#f4f2ed;text-shadow:none}
+.hero .hero-name>.hero-name-outline{display:block;margin-top:.08em;font-size:1em;line-height:.82;letter-spacing:-7px;color:transparent;-webkit-text-stroke:1.5px rgba(226,232,235,.48);text-stroke:1.5px rgba(226,232,235,.48);paint-order:stroke fill;text-shadow:none}
+@media(max-width:1100px){.hero .hero-name{font-size:clamp(68px,8vw,94px);letter-spacing:-5px}.hero .hero-name>.hero-name-solid,.hero .hero-name>.hero-name-outline{letter-spacing:-5px}}
+@media(max-width:760px){.hero .hero-name{width:100%;font-size:clamp(52px,16vw,76px);line-height:.8;letter-spacing:-4px}.hero .hero-name>.hero-name-solid,.hero .hero-name>.hero-name-outline{letter-spacing:-4px}.hero .hero-name>.hero-name-outline{-webkit-text-stroke-width:1.15px;text-stroke-width:1.15px}}
+@media(max-width:370px){.hero .hero-name{font-size:clamp(47px,15.2vw,56px);letter-spacing:-3px}.hero .hero-name>.hero-name-solid,.hero .hero-name>.hero-name-outline{letter-spacing:-3px}}
