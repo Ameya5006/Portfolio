@@ -1,4 +1,8 @@
 node_modules
+review/
+*.tsbuildinfo
+/vite.config.js
+/vite.config.d.ts
 dist
 .vercel
 *.local

@@ -1,238 +1,922 @@
-import { memo, useEffect, useRef, useState, type ReactNode } from 'react';
-import { ArrowDown, ArrowUpRight, Award, Braces, Check, Code2, Cpu, Dumbbell, Github, GraduationCap, Hand, HeartPulse, Home, Linkedin, MapPin, MessageCircle, Pause, Play, Radio, Send, Smartphone, Sparkles, Waves, Workflow, X } from 'lucide-react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import {
+  ArrowDown,
+  ArrowRight,
+  ArrowUp,
+  ArrowUpRight,
+  Check,
+  Github,
+  Menu,
+  Pause,
+  Play,
+  Plus,
+  X,
+} from "lucide-react";
+import Sculpture, { type Finish } from "./Sculpture";
+import ProjectArt from "./ProjectArt";
+import {
+  achievements,
+  certifications,
+  experience,
+  github,
+  linkedin,
+  navigation,
+  projects,
+  resume,
+  supportingExperience,
+  toolkit,
+} from "./content";
+import { useExperience, useReactiveCursor } from "./useExperience";
+import { useArtDirection } from "./useArtDirection";
+import SignalField from "./SignalField";
 
-const github = 'https://github.com/Ameya5006';
-const linkedin = 'https://www.linkedin.com/in/ameya-agarwal/';
-const navigation = [
-  { id: 'home', label: 'Start', icon: Home }, { id: 'work', label: 'Projects', icon: Braces },
-  { id: 'stack', label: 'Toolkit', icon: Cpu }, { id: 'journey', label: 'Journey', icon: Workflow },
-  { id: 'credentials', label: 'Credentials', icon: Award }, { id: 'contact', label: 'Connect', icon: Send },
-];
-const projects = [
-  { id: 'gym', number: '01', title: 'GymFlow', category: 'FREELANCE · IN PRODUCTION', headline: 'Two gyms.\nZero juggling.', description: 'One platform for Fitness First Boxing Club and Nisha Fitness. Built to bring memberships, payments and day-to-day operations into one place.', highlights: ['Member + admin dashboards', 'Sheets sync + WhatsApp reminders', 'Firebase authentication + UPI'], tags: ['React 19', 'TypeScript', 'Firebase', 'Apps Script'], detail: 'React 19 · TypeScript 6 · Vite 8 · Tailwind CSS · Firebase Auth · Firestore · Google Sheets API · Google Apps Script · WhatsApp notifications · UPI integration · Vercel', repo: '/Dual-gym-website', live: 'https://boxingguruji.vercel.app/' },
-  { id: 'palm', number: '02', title: 'PalmChef', category: 'FULL-STACK · AI + INTERACTION', headline: 'Good food.\nHands off.', description: 'A kitchen assistant for the moments your hands are busy. Gesture controls, spoken recipes and AI assistance keep the cooking moving.', highlights: ['MediaPipe gesture navigation', 'Gemini recipes + voice guidance', 'Timers + offline PWA'], tags: ['React 18', 'MediaPipe', 'Gemini', 'MongoDB'], detail: 'TypeScript · Vite · Tailwind CSS · Node.js · Express · MongoDB / Mongoose · JWT · bcrypt.js · CORS · Zustand · PDF.js · Web Speech API · Vitest · React Testing Library · Docker · Nginx · Render', repo: '/PalmChef', live: 'https://palmchef-14qa.onrender.com' },
-  { id: 'amedic', number: '03', title: 'Amedic', category: 'FLUTTER · HEALTH TRACKER', headline: 'Little habits.\nBigger picture.', description: 'A pocket view of everyday wellbeing. Track movement, understand health calculations and turn scattered habits into visible progress.', highlights: ['Steps, goals + progress charts', 'BMI/BMR, sleep + nutrition', 'Shareable health summaries'], tags: ['Flutter', 'Dart', 'pedometer', 'fl_chart'], detail: 'Flutter · Dart · pedometer · fl_chart · share_plus · Health calculations · Interactive charts · Flutter animations', repo: '/Amedic' },
-  { id: 'ocean', number: '04', title: 'FloatChat', category: 'FLUTTER · ARGO MOBILE', headline: 'An ocean of data.\nA pocket explorer.', description: 'Bring ARGO ocean data closer. Explore maps and ocean profiles, browse alerts, download data and try the conversational demo.', highlights: ['Interactive ocean maps', 'Profiles, alerts + downloads', 'Conversational demo'], tags: ['Flutter', 'Dart', 'flutter_map', 'latlong2'], detail: 'Flutter · Dart · flutter_map · latlong2 · Map-based exploration · Ocean profiles · Alerts · Data downloads · Conversational demo', repo: '/FloatChat_app' },
-];
-const toolkit = [
-  { title: 'Languages', items: ['Python', 'Java', 'C++', 'TypeScript', 'JavaScript', 'Dart', 'HTML', 'CSS'] },
-  { title: 'Interfaces', items: ['React 18 / 19', 'Flutter', 'Tailwind CSS', 'Vite', 'Framer Motion', 'Zustand', 'React Router'] },
-  { title: 'Backend', items: ['Node.js', 'Express', 'MongoDB', 'Mongoose', 'Firebase Auth', 'Firestore', 'REST APIs', 'JWT', 'bcrypt.js', 'CORS', 'Zod'] },
-  { title: 'AI / ML & APIs', items: ['Python', 'NumPy', 'pandas', 'scikit-learn', 'Classification', 'Regression', 'Model evaluation', 'MLOps', 'Gemini API', 'MediaPipe', 'Web Speech API', 'Google Sheets API', 'Apps Script'] },
-  { title: 'Ship & test', items: ['Docker', 'Nginx', 'Vercel', 'Render', 'Git / GitHub', 'Vitest', 'React Testing Library', 'ESLint', 'Prettier', 'PostCSS', 'Nodemon', 'VS Code'] },
-  { title: 'App extras', items: ['PDF.js', 'pedometer', 'fl_chart', 'share_plus', 'flutter_map', 'latlong2', 'Flutter animations'] },
-];
-const experience = [
-  { period: 'MAR 2025 — MAR 2026', org: 'ZARVA · EARLY-STAGE STARTUP', title: 'Full-stack Developer', description: 'Built and refined features for a Flutter mobile app, improving user experience and application performance in a collaborative startup team.', icon: Smartphone },
-  { period: 'SEP 2024 — MAY 2025', org: 'GEEKSFORGEEKS SOCIETY · BENNETT', title: 'Core Team', description: 'Helped run coding and tech events, wrote requirement documents, and coordinated technical, venue and participant needs.', icon: Code2 },
-  { period: 'AUG 2024 — AUG 2028', org: 'BENNETT UNIVERSITY', title: 'B.Tech · Computer Science', description: 'Building across full-stack and Flutter while exploring AI/ML and strengthening DSA with C++.', icon: GraduationCap },
-];
-const supportingExperience = [
-  ['APR 2025 — APR 2026', 'Member', 'Career Advancement Committee · School of CSET'],
-  ['MAR 2025 — JUL 2025', 'Core Team', 'Centre for Law, Technology and Innovation · LexHack'],
-  ['AUG 2024', 'Management Core Team', 'Under 25 Summit · crowd and resource coordination'],
-  ['APR 2023 — APR 2024', 'Cultural House Secretary', 'Delhi Public School Roorkee · 500+ participant events'],
-];
-const certifications = [
-  { title: 'Deloitte Australia — Data Analytics Job Simulation', tag: 'DATA ANALYTICS', icon: Braces },
-  { title: 'Python Fundamentals', tag: 'PROGRAMMING', icon: Code2 },
-  { title: 'Introduction to Microprocessors', tag: 'COMPUTER ARCHITECTURE', icon: Cpu },
-  { title: 'Operating Systems and You: Becoming a Power User', tag: 'OPERATING SYSTEMS', icon: Code2 },
-  { title: 'The Bits and Bytes of Computer Networking', tag: 'NETWORKING', icon: Workflow },
-  { title: 'Smart India Hackathon Certificate', tag: 'HACKATHON', icon: Sparkles },
-  { title: 'Entrepreneurship Strategy: From Ideation to Exit', tag: 'PRODUCT & BUSINESS', icon: Workflow },
-  { title: 'Climate Change Negotiations and Health', tag: 'INTERDISCIPLINARY', icon: Award },
-];
-function External({ href, children, className = '' }: { href: string; children: ReactNode; className?: string }) {
-  return <a href={href} target="_blank" rel="noopener noreferrer" className={className}>{children}<ArrowUpRight size={16} aria-hidden="true" /><span className="sr-only"> (opens in a new tab)</span></a>;
+function External({
+  href,
+  children,
+  className = "",
+}: {
+  href: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={className}
+    >
+      {children}
+      <ArrowUpRight size={16} aria-hidden="true" />
+      <span className="sr-only"> (opens in a new tab)</span>
+    </a>
+  );
 }
-function ProjectVisual({ id }: { id: string }) {
-  return <div className={`project-art ${id}`} aria-hidden="true">
-    <div className="art-grid" /><span className="art-caption mono">SYSTEM AT A GLANCE</span>
-    {id === 'gym' && <div className="gym-system"><div className="gym-brands"><span>FITNESS FIRST<br /><b>BOXING CLUB</b></span><span>NISHA<br /><b>FITNESS</b></span></div><div className="connector-lines" /><div className="gym-hub"><Dumbbell size={34} /><strong>GymFlow</strong><span>ONE CONNECTED WORKFLOW</span></div><div className="gym-nodes"><span><Check size={15} />Members</span><span><Workflow size={15} />Automation</span><span><Check size={15} />Payments</span></div></div>}
-    {id === 'palm' && <div className="gesture-system"><div className="gesture-orbit" /><div className="hand-frame"><i /><i /><i /><i /><Hand size={106} strokeWidth={1} /><span className="scan-line" /></div><div className="gesture-chip"><Radio size={15} /> GESTURE INPUT</div><div className="recipe-slip"><Sparkles size={20} /><div><strong>A little kitchen magic.</strong><span>Gesture → recipe → voice</span></div><div className="voice-bars">{Array.from({ length: 7 }, (_, i) => <i key={i} style={{ animationDelay: `${i * .12}s` }} />)}</div></div></div>}
-    {id === 'amedic' && <div className="health-system"><div className="health-orbit" /><div className="phone"><div className="phone-notch" /><div className="phone-title"><HeartPulse size={19} /><b>Amedic</b></div><span className="phone-sub">YOUR DAY, CONNECTED</span><div className="activity-ring"><HeartPulse size={35} strokeWidth={1.2} /><span>KEEP MOVING</span></div><div className="health-tags"><span>Steps</span><span>Sleep</span><span>Nutrition</span></div><svg viewBox="0 0 220 55"><path d="M0 40 C20 40 18 15 40 22 S65 52 82 30 S105 40 122 17 S150 40 164 20 S190 30 220 6" fill="none" stroke="currentColor" strokeWidth="2" /></svg><small>Habits → insights → progress</small></div><span className="health-float"><Check size={16} />Small steps count.</span></div>}
-    {id === 'ocean' && <div className="ocean-system"><svg className="ocean-contours" viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice">{Array.from({ length: 11 }, (_, i) => <path key={i} d={`M-80 ${30 + i * 30} C80 ${-60 + i * 27} 180 ${270 + i * 14} 320 ${100 + i * 24} S540 ${200 + i * 20} 590 ${80 + i * 30}`} />)}</svg><div className="ocean-point point-one"><i /><span>ARGO FLOAT</span></div><div className="ocean-point point-two"><i /></div><div className="ocean-point point-three"><i /></div><div className="ocean-panel"><Waves size={31} strokeWidth={1.2} /><div><strong>Below the surface.</strong><span>MAPS / PROFILES / DISCOVERY</span></div><MapPin size={18} /></div><span className="ocean-coordinate mono">EXPLORE A DIFFERENT DEPTH</span></div>}
-    <span className="art-index mono">{id === 'gym' ? 'WEB / 01' : id === 'palm' ? 'AI / 02' : id === 'amedic' ? 'MOBILE / 03' : 'MOBILE / 04'}</span>
-  </div>;
-}
 
-const MemoProjectVisual = memo(ProjectVisual);
-
-const buildSystems = [
-  { id: 'web', label: 'WEB SYSTEMS', detail: 'React + Node', status: 'FULL-STACK PRODUCTS', icon: Braces },
-  { id: 'mobile', label: 'FLUTTER APPS', detail: 'Dart + Mobile', status: 'MOBILE EXPERIENCES', icon: Smartphone },
-  { id: 'ai', label: 'AI / ML LAB', detail: 'Python + Models', status: 'INTELLIGENT WORKFLOWS', icon: Sparkles },
-  { id: 'automation', label: 'AUTOMATION', detail: 'APIs + Firebase', status: 'CONNECTED SYSTEMS', icon: Workflow },
-];
-
-function BuildConstellation({ motion }: { motion: boolean }) {
-  const [focus, setFocus] = useState(0);
-  const pointerFrame = useRef(0);
-  const selected = buildSystems[focus];
+function Showcase() {
+  const [filter, setFilter] = useState("All");
+  const root = useRef<HTMLDivElement>(null);
+  const selection = projects.filter(
+    (item) =>
+      filter === "All" ||
+      (filter === "Web"
+        ? ["gym", "palm"].includes(item.id)
+        : ["amedic", "ocean"].includes(item.id)),
+  );
 
   useEffect(() => {
-    if (!motion) return;
-    const timer = window.setInterval(() => {
-      setFocus(value => (value + 1) % buildSystems.length);
-    }, 2600);
-    return () => window.clearInterval(timer);
-  }, [motion]);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle("is-in-view", entry.isIntersecting);
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          }
+        });
+      },
+      { threshold: 0.05 },
+    );
+    root.current
+      ?.querySelectorAll("[data-reveal]")
+      .forEach((element) => observer.observe(element));
+    window.dispatchEvent(new Event("portfolio:layout"));
+    return () => observer.disconnect();
+  }, [filter]);
 
-  useEffect(() => () => window.cancelAnimationFrame(pointerFrame.current), []);
-
-  return <div
-    className="build-constellation"
-    aria-label="Interactive map of Ameya's technical systems"
-    onPointerMove={event => {
-      if (!motion) return;
-      const target = event.currentTarget;
-      const clientX = event.clientX;
-      const clientY = event.clientY;
-      window.cancelAnimationFrame(pointerFrame.current);
-      pointerFrame.current = window.requestAnimationFrame(() => {
-        const rect = target.getBoundingClientRect();
-        const x = ((clientX - rect.left) / rect.width - .5) * 2;
-        const y = ((clientY - rect.top) / rect.height - .5) * 2;
-        target.style.setProperty('--mx', (x * 16).toFixed(1) + 'px');
-        target.style.setProperty('--my', (y * 12).toFixed(1) + 'px');
-      });
-    }}
-    onPointerLeave={event => {
-      window.cancelAnimationFrame(pointerFrame.current);
-      event.currentTarget.style.setProperty('--mx', '0px');
-      event.currentTarget.style.setProperty('--my', '0px');
-    }}
-  >
-    <div className="constellation-stage">
-      <div className="constellation-topline">
-        <span>AMEYA.SYSTEMS / LIVE MAP</span>
-        <b>04 MODULES · 01 BUILDER</b>
+  return (
+    <div className="showcase" ref={root}>
+      <div className="showcase-toolbar wrap">
+        <div className="project-filters" aria-label="Filter projects">
+          {["All", "Web", "Flutter"].map((value) => (
+            <button
+              type="button"
+              key={value}
+              aria-pressed={filter === value}
+              onClick={() => setFilter(value)}
+            >
+              {value}
+              <sup>{value === "All" ? "04" : "02"}</sup>
+            </button>
+          ))}
+        </div>
+        <span className="project-scroll-hint">
+          <ArrowDown size={14} aria-hidden="true" /> Keep scrolling. Every build
+          has a story.
+        </span>
+        <span className="sr-only" role="status">
+          {selection.length} projects shown.
+        </span>
       </div>
-
-      <svg className="constellation-map" viewBox="0 0 620 540" aria-hidden="true">
-        <path d="M310 270 C245 205 180 160 110 112" />
-        <path d="M310 270 C380 205 442 160 510 115" />
-        <path d="M310 270 C232 322 174 375 105 425" />
-        <path d="M310 270 C386 324 445 378 515 425" />
-        <path d="M110 112 C250 55 374 55 510 115" />
-        <path d="M105 425 C245 485 380 485 515 425" />
-        <circle cx="310" cy="270" r="72" />
-        <circle cx="310" cy="270" r="122" />
-        <circle className="map-pulse" cx="110" cy="112" r="4" />
-        <circle className="map-pulse" cx="510" cy="115" r="4" />
-        <circle className="map-pulse" cx="105" cy="425" r="4" />
-        <circle className="map-pulse" cx="515" cy="425" r="4" />
-      </svg>
-
-      <div className="constellation-ring ring-one" aria-hidden="true" />
-      <div className="constellation-ring ring-two" aria-hidden="true" />
-      <div className="constellation-ring ring-three" aria-hidden="true" />
-
-      <div className="constellation-core" aria-hidden="true">
-        <span className="core-mark">a<i>/</i></span>
-        <b>AMEYA.SYSTEMS</b>
-        <small>IDEA → PRODUCT</small>
-      </div>
-
-      {buildSystems.map((item, index) => {
-        const Icon = item.icon;
-        return <button
-          type="button"
-          className={'constellation-node node-' + item.id + (focus === index ? ' active' : '')}
-          key={item.id}
-          aria-pressed={focus === index}
-          onPointerEnter={() => setFocus(index)}
-          onFocus={() => setFocus(index)}
-          onClick={() => setFocus(index)}
-        >
-          <span><Icon size={16} strokeWidth={1.5} /></span>
-          <b>{item.label}</b>
-          <small>{item.detail}</small>
-        </button>;
-      })}
-
-      <span className="constellation-chip chip-one">01 / INPUT</span>
-      <span className="constellation-chip chip-two">03 / SHIP</span>
-      <span className="constellation-chip chip-three">02 / BUILD</span>
-
-      <div className="constellation-status" aria-live="polite">
-        <span><i /> SYSTEM FOCUS</span>
-        <b>{selected.status}</b>
+      <div className="project-flow wrap" aria-label="Selected projects">
+        {selection.map((project) => (
+          <article
+            className={`project-scene scene-${project.id}`}
+            id={`project-${project.id}`}
+            key={project.id}
+            aria-labelledby={`title-${project.id}`}
+            data-reveal
+          >
+            <header className="project-title">
+              <span className="eyebrow">
+                {project.number} / {project.category}
+              </span>
+              <h3 id={`title-${project.id}`}>
+                {project.title}
+                <span>{project.id === "ocean" ? " / ARGO Mobile" : ""}</span>
+              </h3>
+              <h4>{project.headline.split("\n").join(" ")}</h4>
+            </header>
+            <div className="project-summary project-description">
+              <p>{project.description}</p>
+            </div>
+            <a
+              className="project-scene-visual"
+              href={project.live || github + project.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.title}: ${project.live ? "open live project" : "view source code"} (opens in a new tab)`}
+            >
+              <ProjectArt id={project.id} />
+              <span className="project-light" aria-hidden="true" />
+              <span className="project-frame" aria-hidden="true" />
+              <span className="slide-number" aria-hidden="true">
+                /{project.number}
+              </span>
+              <span className="slide-label">
+                {project.live ? "Open project" : "View source"}{" "}
+                <ArrowUpRight size={18} aria-hidden="true" />
+              </span>
+            </a>
+            <div className="project-scene-details project-description">
+              <ul>
+                {project.highlights.map((item) => (
+                  <li key={item}>
+                    <Check size={13} aria-hidden="true" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <div className="tags">
+                {project.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+              <details
+                className="technical-details"
+                onToggle={() =>
+                  window.dispatchEvent(new Event("portfolio:layout"))
+                }
+              >
+                <summary>
+                  Full technical stack <Plus size={16} aria-hidden="true" />
+                </summary>
+                <p>{project.detail}</p>
+              </details>
+            </div>
+            <div className="project-links">
+              {project.live && (
+                <External href={project.live} className="button button-dark">
+                  Open project
+                </External>
+              )}
+              <External href={github + project.repo} className="text-link">
+                <Github size={16} />
+                Code
+              </External>
+            </div>
+          </article>
+        ))}
       </div>
     </div>
-    <span className="constellation-caption"><i /> MOVE THROUGH THE SYSTEM. FIND THE CONNECTIONS.</span>
-    <span className="constellation-side">WEB · MOBILE · AI/ML · AUTOMATION</span>
-  </div>;
+  );
+}
+function Skills() {
+  const [open, setOpen] = useState<number | null>(3);
+  return (
+    <div className="skill-list">
+      {toolkit.map((group, i) => (
+        <div
+          className={`skill-group ${open === i ? "is-open" : ""}`}
+          key={group.title}
+        >
+          <h3>
+            <button
+              type="button"
+              aria-expanded={open === i}
+              aria-controls={`skills-${i}`}
+              onClick={() => setOpen(open === i ? null : i)}
+            >
+              <span>0{i + 1}</span>
+              <span>{group.title}</span>
+              <Plus size={18} />
+            </button>
+          </h3>
+          <div className="skill-content" id={`skills-${i}`} hidden={open !== i}>
+            {group.items.map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
 
-const MemoBuildConstellation = memo(BuildConstellation);
+function Milestones() {
+  return (
+    <section
+      className="milestones light-section"
+      aria-labelledby="milestones-title"
+    >
+      <div className="wrap">
+        <p className="eyebrow">HACKATHONS & SPORTS</p>
+        <h2 id="milestones-title">
+          The same drive.
+          <br />
+          <span className="serif">A different arena.</span>
+        </h2>
+        <div className="milestone-timeline">
+          {achievements.map((item, i) => (
+            <article className="milestone" key={item.title} data-reveal>
+              <span className="milestone-index">0{i + 1}</span>
+              <div>
+                <span className="eyebrow">{item.kind}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+                {item.progression && (
+                  <span className="milestone-progress">{item.progression}</span>
+                )}
+                {item.previous && (
+                  <small className="milestone-previous">{item.previous}</small>
+                )}
+              </div>
+              <span
+                className={`milestone-mark ${i === 1 ? "medal-mark" : ""}`}
+                aria-hidden="true"
+              >
+                {item.mark}
+              </span>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
-export default function HomePage() {
-  const [motion, setMotion] = useState(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const [intro, setIntro] = useState(() => { try { return !sessionStorage.getItem('ameya-intro-v2') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { return false; } });
-  const [active, setActive] = useState('home');
-  const [toolGroup, setToolGroup] = useState(0);
-  const progressRef = useRef<HTMLDivElement>(null);
-  const [filter, setFilter] = useState('All');
+export default function App() {
+  const [motion, setMotion] = useState(
+    () => !matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  const [finish, setFinish] = useState<Finish>("silver");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState("home");
+  const [intro, setIntro] = useState(() => {
+    try {
+      return (
+        !sessionStorage.getItem("ameya-immersive-intro") &&
+        !matchMedia("(prefers-reduced-motion: reduce)").matches
+      );
+    } catch {
+      return false;
+    }
+  });
+  const menu = useRef<HTMLDialogElement>(null);
+  const progress = useRef<HTMLDivElement>(null);
+  useExperience(motion, menuOpen);
+  useReactiveCursor(motion);
+  useArtDirection(motion && !menuOpen);
   useEffect(() => {
     if (!intro) return;
-    const timer = window.setTimeout(() => setIntro(false), 1150);
-    try { sessionStorage.setItem('ameya-intro-v2', 'seen'); } catch { /* Storage is optional. */ }
-    return () => window.clearTimeout(timer);
+    const timer = setTimeout(() => setIntro(false), 1000);
+    try {
+      sessionStorage.setItem("ameya-immersive-intro", "seen");
+    } catch {}
+    return () => clearTimeout(timer);
   }, [intro]);
   useEffect(() => {
-    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const change = () => { setMotion(!query.matches); if (query.matches) setIntro(false); };
-    query.addEventListener('change', change);
-    return () => query.removeEventListener('change', change);
+    const query = matchMedia("(prefers-reduced-motion: reduce)");
+    const change = () => {
+      setMotion(!query.matches);
+      if (query.matches) setIntro(false);
+    };
+    query.addEventListener("change", change);
+    return () => query.removeEventListener("change", change);
   }, []);
+  useEffect(() => {
+    document.documentElement.dataset.motion = motion ? "on" : "off";
+  }, [motion]);
+  useEffect(() => {
+    if (menuOpen) menu.current?.showModal();
+    else menu.current?.close();
+    const previous = document.body.style.overflow;
+    if (menuOpen) document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [menuOpen]);
   useEffect(() => {
     let frame = 0;
     const update = () => {
       frame = 0;
-      const line = window.innerHeight * .4;
-      let current = 'home';
-      navigation.forEach(({ id }) => { if ((document.getElementById(id)?.getBoundingClientRect().top ?? Infinity) <= line) current = id; });
+      let current = "home";
+      navigation.forEach(({ id }) => {
+        if (
+          (document.getElementById(id)?.getBoundingClientRect().top ??
+            Infinity) <
+          innerHeight * 0.4
+        )
+          current = id;
+      });
       setActive(current);
-      const height = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = height > 0 ? window.scrollY / height : 0;
-      progressRef.current?.style.setProperty('transform', `scaleX(${progress})`);
+      const height = document.documentElement.scrollHeight - innerHeight;
+      progress.current?.style.setProperty(
+        "transform",
+        `scaleX(${height > 0 ? scrollY / height : 0})`,
+      );
     };
-    const scroll = () => { if (!frame) frame = requestAnimationFrame(update); };
-    update(); window.addEventListener('scroll', scroll, { passive: true }); window.addEventListener('resize', scroll);
-    return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', scroll); window.removeEventListener('resize', scroll); };
+    const scroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    addEventListener("scroll", scroll, { passive: true });
+    addEventListener("resize", scroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      removeEventListener("scroll", scroll);
+      removeEventListener("resize", scroll);
+    };
   }, []);
-  const visibleProjects = projects.filter(project => filter === 'All' || (filter === 'Web' ? ['gym', 'palm'].includes(project.id) : ['amedic', 'ocean'].includes(project.id)));
-  return <div className={`portfolio ${motion ? 'motion-on' : 'motion-off'}`}>
-    <div className="ambient-background" aria-hidden="true">
-      <div className="ambient-silk">
-        <span className="satin-fold fold-one" />
-        <span className="satin-fold fold-two" />
-        <span className="satin-fold fold-three" />
-        <span className="satin-highlight" />
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.06 },
+    );
+    document
+      .querySelectorAll("[data-reveal]")
+      .forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      className="portfolio"
+      data-motion={motion ? "on" : "off"}
+      data-menu-open={menuOpen}
+    >
+      <Sculpture motion={motion && !menuOpen} finish={finish} />
+      <div className="reactive-cursor" aria-hidden="true">
+        <span />
       </div>
-      <span className="ambient-vignette" />
-      <span className="ambient-grain" />
+      <div className="reading-progress" ref={progress} aria-hidden="true" />
+      <a className="skip-link" href="#work">
+        Skip to projects
+      </a>
+      {intro && (
+        <div
+          className="arrival"
+          role="status"
+          aria-label="Ameya portfolio introduction"
+        >
+          <span className="arrival-logo">
+            a<span>↗</span>
+          </span>
+          <p className="eyebrow">IDEAS INTO INTERFACES.</p>
+          <button type="button" onClick={() => setIntro(false)}>
+            Skip intro <ArrowRight size={15} />
+          </button>
+        </div>
+      )}
+      <header className="site-header">
+        <a href="#home" className="wordmark" aria-label="Ameya home">
+          a<span>↗</span>
+        </a>
+        <span className="header-caption">
+          BUILDER.
+          <br />
+          STILL CURIOUS.
+        </span>
+        <div className="header-actions">
+          <button
+            type="button"
+            className="menu-button"
+            onClick={() => setMenuOpen(true)}
+            aria-haspopup="dialog"
+            aria-expanded={menuOpen}
+          >
+            Explore <Menu size={17} />
+          </button>
+        </div>
+      </header>
+      <dialog
+        ref={menu}
+        className="menu-dialog"
+        aria-label="Explore portfolio"
+        onCancel={() => setMenuOpen(false)}
+      >
+        <div className="menu-top">
+          <a
+            className="wordmark"
+            href="#home"
+            onClick={() => setMenuOpen(false)}
+            aria-label="Home"
+          >
+            a<span>↗</span>
+          </a>
+          <button
+            autoFocus
+            type="button"
+            className="menu-button"
+            onClick={() => setMenuOpen(false)}
+          >
+            Close <X size={18} />
+          </button>
+        </div>
+        <div className="menu-body">
+          <p className="eyebrow">IDEAS → CODE → REAL WORLD</p>
+          <nav>
+            {navigation.map(({ id, label }, i) => (
+              <a href={`#${id}`} key={id} onClick={() => setMenuOpen(false)}>
+                <span>0{i + 1}</span>
+                {label}
+                <ArrowUpRight />
+              </a>
+            ))}
+          </nav>
+          <div className="menu-social">
+            <External href={github}>GitHub</External>
+            <External href={linkedin}>LinkedIn</External>
+            <External href={resume}>Résumé</External>
+          </div>
+        </div>
+      </dialog>
+      <nav
+        className={`section-dock ${["work", "journey", "credentials"].includes(active) ? "on-light" : ""}`}
+        aria-label="Section navigation"
+      >
+        {navigation.map(({ id, label }, i) => (
+          <a
+            href={`#${id}`}
+            key={id}
+            aria-label={label}
+            aria-current={active === id ? "location" : undefined}
+          >
+            <span>0{i + 1}</span>
+            <span className="dock-label">{label}</span>
+          </a>
+        ))}
+        <button
+          type="button"
+          onClick={() => setMotion((value) => !value)}
+          aria-label={motion ? "Pause animations" : "Enable animations"}
+          aria-pressed={!motion}
+        >
+          {motion ? <Pause size={13} /> : <Play size={13} />}
+        </button>
+      </nav>
+      <main className="site-content">
+        <section className="hero" id="home" aria-labelledby="hero-name">
+          <SignalField />
+          <div className="hero-copy">
+            <h1 id="hero-name" aria-label="Ameya Agarwal">
+              <span>AMEYA</span>
+              <span className="name-outline">AGARWAL</span>
+            </h1>
+            <p className="hero-roleline">FULL-STACK · FLUTTER · AI / ML</p>
+            <div className="hero-actions">
+              <a href="#work" className="button button-light">
+                Enter the playground <ArrowDown size={16} />
+              </a>
+              <External
+                href={resume}
+                className="button button-outline hero-resume"
+              >
+                View Résumé
+              </External>
+            </div>
+          </div>
+          <div className="sculpture-controls">
+            <div className="finish-controls" aria-label="Sculpture finish">
+              {(["silver", "warm", "cobalt"] as const).map((value) => (
+                <button
+                  type="button"
+                  key={value}
+                  aria-label={`${value} sculpture finish`}
+                  aria-pressed={finish === value}
+                  className={`finish-dot dot-${value}`}
+                  onClick={() => setFinish(value)}
+                >
+                  <span />
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="hero-bottom">
+            <a href="#work" aria-label="Scroll into the good stuff">
+              <ArrowDown size={18} />
+            </a>
+          </div>
+        </section>
+        <section
+          className="work-section light-section"
+          id="work"
+          aria-labelledby="work-title"
+        >
+          <div className="section-intro wrap" data-reveal>
+            <p className="eyebrow">
+              <span className="section-counter">01 /</span> SELECTED PROJECTS
+            </p>
+            <div className="section-heading">
+              <h2 id="work-title">
+                Built for
+                <br />
+                <span className="serif">real life.</span>
+              </h2>
+              <p>
+                Four builds. Different problems.
+                <br />
+                The same itch to make things work.
+              </p>
+            </div>
+          </div>
+          <Showcase />
+          <div className="work-bottom wrap">
+            <span className="eyebrow">MORE EXPERIMENTS. MORE SIDE QUESTS.</span>
+            <External href={`${github}?tab=repositories`} className="text-link">
+              All repositories
+            </External>
+          </div>
+        </section>
+        <section
+          className="stack-section"
+          id="stack"
+          aria-labelledby="stack-title"
+        >
+          <div className="wrap">
+            <p className="eyebrow" data-reveal>
+              <span className="section-counter">02 /</span> THE TOOLKIT
+            </p>
+            <div className="about-statement" data-reveal>
+              <h2 id="stack-title">
+                Many tools.
+                <br />
+                <span className="muted">One</span> curious
+                <br />
+                <span className="serif">mind.</span>
+              </h2>
+              <div className="about-copy">
+                <span className="asterisk-orbit" aria-hidden="true">
+                  ✳
+                </span>
+                <p>
+                  No proficiency bars.
+                  <br />
+                  Just tools behind the things I build.
+                </p>
+                <External href={resume} className="text-link">
+                  View Résumé
+                </External>
+                <span className="eyebrow education-note">
+                  B.TECH CSE / BENNETT UNIVERSITY
+                </span>
+              </div>
+            </div>
+            <div className="expertise-layout">
+              <article className="ai-editorial" data-reveal>
+                <span className="eyebrow">
+                  CURRENT FOCUS / AI + MACHINE LEARNING
+                </span>
+                <div
+                  className="neural-sculpture ambient-scene"
+                  aria-hidden="true"
+                >
+                  {Array.from({ length: 9 }, (_, i) => (
+                    <i key={i} style={{ "--ring-index": i } as CSSProperties} />
+                  ))}
+                  <span className="neural-core" />
+                  <div className="neural-signals">
+                    {Array.from({ length: 8 }, (_, i) => (
+                      <b key={i} style={{ "--node": i } as CSSProperties} />
+                    ))}
+                  </div>
+                </div>
+                <h3>
+                  Learning how
+                  <br />
+                  <span className="serif">systems learn.</span>
+                </h3>
+                <p>
+                  Working through the ML pipeline—from data preparation and
+                  feature engineering to training, evaluation, deployment and
+                  monitoring.
+                </p>
+                <div className="ai-tags">
+                  {["Python", "NumPy", "pandas", "scikit-learn", "MLOps"].map(
+                    (item) => (
+                      <span key={item}>{item}</span>
+                    ),
+                  )}
+                </div>
+              </article>
+              <Skills />
+            </div>
+          </div>
+        </section>
+        <div className="interlude ambient-scene" aria-hidden="true">
+          <div>
+            {[0, 1].map((i) => (
+              <span key={i}>
+                THINK IT <b>↗</b> BUILD IT <b>✳</b> BREAK IT <b>↗</b> MAKE IT
+                BETTER <b>✳</b>
+              </span>
+            ))}
+          </div>
+        </div>
+        <section
+          className="journey-section light-section"
+          id="journey"
+          aria-labelledby="journey-title"
+        >
+          <div className="wrap">
+            <div className="section-intro" data-reveal>
+              <p className="eyebrow">
+                <span className="section-counter">03 /</span> PEOPLE, PRODUCTS &
+                PROGRESS
+              </p>
+              <div className="section-heading">
+                <h2 id="journey-title">
+                  More than
+                  <br />
+                  <span className="serif">a commit log.</span>
+                </h2>
+                <p>
+                  Technical experience first.
+                  <br />
+                  The leadership behind it, too.
+                </p>
+              </div>
+            </div>
+            <div className="experience-rows" data-reveal>
+              {experience.map(
+                ({ period, org, title, description, icon: Icon }) => (
+                  <article className="experience-row" key={title}>
+                    <span className="experience-date">{period}</span>
+                    <div>
+                      <span className="eyebrow">{org}</span>
+                      <h3>{title}</h3>
+                      <p>{description}</p>
+                    </div>
+                    <Icon size={25} strokeWidth={1.2} />
+                  </article>
+                ),
+              )}
+            </div>
+            <div className="leadership-heading">
+              <span className="eyebrow">SELECTED LEADERSHIP</span>
+              <span>TRUSTED WITH PEOPLE + EXECUTION</span>
+            </div>
+            <div className="leadership-grid">
+              <article className="leadership-card" data-reveal>
+                <span className="eyebrow">
+                  AUG 2026 — PRESENT / CURRENT CAMPUS ROLE
+                </span>
+                <div
+                  className="leadership-art ambient-scene"
+                  aria-hidden="true"
+                >
+                  <i />
+                  <i />
+                  <i />
+                  <span>↗</span>
+                </div>
+                <h3>
+                  Placement Committee
+                  <br />
+                  Member
+                </h3>
+                <h4>Career Services Center · Bennett University</h4>
+                <p>
+                  Selected to support placement coordination while continuing to
+                  build technical projects.
+                </p>
+              </article>
+              <article className="leadership-card council" data-reveal>
+                <span className="eyebrow">
+                  JUL 2025 — MAY 2026 / STUDENT COUNCIL
+                </span>
+                <div
+                  className="leadership-art council-art ambient-scene"
+                  aria-hidden="true"
+                >
+                  <i />
+                  <i />
+                  <i />
+                  <span>✳</span>
+                </div>
+                <h3>
+                  Sub Head
+                  <br />
+                  Operations
+                </h3>
+                <h4>Bennett University Student Council</h4>
+                <p>
+                  Trusted with teams, resources and event logistics—including
+                  the smooth execution of Uphoria, the university’s three-day
+                  annual fest.
+                </p>
+              </article>
+            </div>
+            <details className="supporting-experience">
+              <summary>
+                More leadership & operations{" "}
+                <span>
+                  04 MORE ROLES <Plus size={17} />
+                </span>
+              </summary>
+              <div className="other-roles">
+                {supportingExperience.map(([period, role, org]) => (
+                  <article key={org}>
+                    <span>{period}</span>
+                    <div>
+                      <h4>{role}</h4>
+                      <p>{org}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <External href={linkedin} className="text-link">
+                Full timeline on LinkedIn
+              </External>
+            </details>
+            <aside className="practice-panel" data-reveal>
+              <div>
+                <p className="eyebrow">THE PROBLEM-SOLVING LOOP</p>
+                <h3>
+                  One more
+                  <br />
+                  <span className="serif">“got it.”</span>
+                </h3>
+                <p>
+                  Arrays. Hashing. Binary search. Sorting.
+                  <br />
+                  Small reps, sharper thinking.
+                </p>
+                <External
+                  href={`${github}/neetcode-submissions`}
+                  className="text-link"
+                >
+                  NeetCode submissions
+                </External>
+              </div>
+              <div className="practice-right">
+                <div className="practice-stats">
+                  <div>
+                    <strong>
+                      12<span>↗</span>
+                    </strong>
+                    <span>problems synced</span>
+                  </div>
+                  <div>
+                    <strong>
+                      03<span>d</span>
+                    </strong>
+                    <span>verified streak</span>
+                  </div>
+                </div>
+                <div className="practice-topics">
+                  <span>arrays[]</span>
+                  <span>hash&#123;&#125;</span>
+                  <span>search()</span>
+                </div>
+                <small>
+                  Repository snapshot · 5 Sep 2026
+                  <br />
+                  Streak: 2–4 Sep · Synced submissions only
+                </small>
+              </div>
+            </aside>
+          </div>
+        </section>
+        <Milestones />
+        <section
+          className="credentials-section light-section"
+          id="credentials"
+          aria-labelledby="credentials-title"
+        >
+          <div className="wrap">
+            <div className="learning-layout">
+              <div className="learning-copy" data-reveal>
+                <p className="eyebrow">
+                  <span className="section-counter">04 /</span> VERIFIED
+                  LEARNING
+                </p>
+                <h2 id="credentials-title">
+                  Proof of
+                  <br />
+                  <span className="serif">curiosity.</span>
+                </h2>
+                <p>
+                  Technical credentials lead.
+                  <br />
+                  Every listed certification follows.
+                </p>
+                <External href={linkedin} className="text-link">
+                  View credentials on LinkedIn
+                </External>
+              </div>
+              <div className="credential-list">
+                {certifications.map(({ title, tag, icon: Icon }, i) => (
+                  <External href={linkedin} className="credential" key={title}>
+                    <span>{String(i + 1).padStart(2, "0")}</span>
+                    <div>
+                      <span className="eyebrow">{tag}</span>
+                      <h3>{title}</h3>
+                    </div>
+                    <Icon size={19} strokeWidth={1.2} />
+                  </External>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          className="contact-section"
+          id="contact"
+          aria-labelledby="contact-title"
+        >
+          <div className="wrap">
+            <div className="contact-top">
+              <p className="eyebrow">
+                <span className="section-counter">05 /</span> OPEN A
+                CONVERSATION
+              </p>
+              <span className="contact-star" aria-hidden="true">
+                ✳
+              </span>
+            </div>
+            <h2 id="contact-title" data-reveal>
+              Got a<br />
+              <span className="serif">wild idea?</span>
+              <a
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-arrow"
+                aria-label="Let’s connect on LinkedIn (opens in a new tab)"
+              >
+                <ArrowUpRight strokeWidth={1.1} />
+              </a>
+            </h2>
+            <p className="contact-manifesto">Let’s make it work.</p>
+            <div className="contact-bottom">
+              <p>
+                A project, a learning opportunity, or a tricky
+                <br />
+                problem worth figuring out. I’m listening.
+              </p>
+              <div>
+                <External href={linkedin}>Let’s connect</External>
+                <External href={github}>GitHub</External>
+                <External href={resume}>Résumé</External>
+              </div>
+            </div>
+            <footer className="site-footer">
+              <a className="wordmark" href="#home" aria-label="Back to top">
+                a<span>↗</span>
+              </a>
+              <span>
+                © {new Date().getFullYear()} AMEYA AGARWAL · BUILT WITH
+                CURIOSITY.
+              </span>
+              <button
+                type="button"
+                className="footer-motion"
+                onClick={() => setMotion((v) => !v)}
+                aria-pressed={!motion}
+              >
+                {motion ? <Pause size={12} /> : <Play size={12} />}{" "}
+                {motion ? "Pause motion" : "Enable motion"}
+              </button>
+              <a href="#home">
+                BACK TO TOP <ArrowUp size={14} />
+              </a>
+            </footer>
+          </div>
+        </section>
+      </main>
     </div>
-    {intro && <div className="intro-screen" role="status" aria-label="Ameya portfolio introduction"><div className="intro-logo">a<span>/</span></div><p className="mono">IDEAS INTO INTERFACES.</p><div className="intro-line" /><button onClick={() => setIntro(false)} aria-label="Skip introduction"><X size={16} /> Skip intro</button></div>}
-    <a className="skip-link" href="#work">Skip to projects</a><div ref={progressRef} className="reading-progress" />
-    <header className="site-header wrap"><a className="wordmark" href="#home" aria-label="Ameya home">a<span>/</span><small>AMEYA AGARWAL</small></a><span className="header-status mono"><i /> BUILDER. STILL CURIOUS.</span><External href={linkedin} className="header-connect">Let’s talk <MessageCircle size={16} /></External></header>
-    <nav className="section-dock" aria-label="Section navigation">{navigation.map(({ id, label, icon: Icon }) => <a href={`#${id}`} key={id} aria-label={label} aria-current={active === id ? 'location' : undefined}><Icon size={18} strokeWidth={1.6} /><span>{label}</span></a>)}<div className="dock-divider" /><button onClick={() => setMotion(!motion)} aria-label={motion ? 'Pause animations' : 'Enable animations'} aria-pressed={motion}>{motion ? <Pause size={16} /> : <Play size={16} />}<span>{motion ? 'Pause motion' : 'Enable motion'}</span></button></nav>
-    <main>
-      <section className="hero wrap" id="home"><div className="hero-backdrop" aria-hidden="true" /><div className="hero-copy"><h1 className="hero-name"><span className="hero-name-solid">AMEYA</span><span className="hero-name-outline">AGARWAL</span></h1><h2 className="hero-manifesto">Curiosity · Code · <em>A little chaos.</em></h2><p className="hero-description">I turn everyday friction into <strong>full-stack products</strong>, <strong>Flutter apps</strong> and useful automation.</p><div className="hero-actions"><a className="primary-button" href="#work">Enter the playground <ArrowDown size={17} /></a><a href="/Ameya_Agarwal_resume.pdf" target="_blank" rel="noopener noreferrer" className="resume-button">View Résumé <ArrowUpRight size={16} /><span className="sr-only"> (opens PDF in a new tab)</span></a><External href={github} className="icon-link"><Github size={19} /><span className="sr-only">GitHub</span></External><External href={linkedin} className="icon-link"><Linkedin size={18} /><span className="sr-only">LinkedIn</span></External></div><p className="hero-footnote mono">B.TECH CSE · 2024—2028 <span>↗</span> BENNETT UNIVERSITY</p></div><MemoBuildConstellation motion={motion} /><div className="hero-baseline"><span className="mono">CURRENT QUEST <b>AI / ML + DSA</b></span><a href="#work" className="mono">SCROLL INTO THE GOOD STUFF <ArrowDown size={15} /></a></div></section>
-      <div className="ticker" aria-hidden="true"><div className="ticker-track">{[0, 1].map(i => <div key={i}><span>THINK IT</span><b>↗</b><span className="outline">BUILD IT</span><b>✳</b><span>BREAK IT</span><b>↗</b><span className="outline">MAKE IT BETTER</span><b>✳</b></div>)}</div></div>
-      <section className="work-section wrap section-space" id="work"><div className="section-heading"><div><p className="eyebrow">01 / SELECTED PROJECTS</p><h2>Built for <em>real life.</em></h2></div><p>Four builds. Different problems.<br />The same itch to make things work.</p></div><div className="project-toolbar"><div className="filter-group" aria-label="Filter projects">{['All', 'Web', 'Flutter'].map(item => <button key={item} aria-pressed={filter === item} onClick={() => setFilter(item)}>{item}<span>{item === 'All' ? '04' : '02'}</span></button>)}</div><span className="mono project-hint">A TOUR THROUGH THE BUILDS ↓</span></div><div className="project-list">{visibleProjects.map(project => <article className={`project-story story-${project.id}`} key={project.id}><MemoProjectVisual id={project.id} /><div className="project-copy"><div className="project-kicker mono"><span>{project.category}</span><span>/{project.number}</span></div><h3>{project.title}<span>{project.id === 'ocean' ? ' / ARGO Mobile' : ''}</span></h3><h4>{project.headline.split('\n').map((line, i) => <span key={line}>{line}{i === 0 && <br />}</span>)}</h4><p>{project.description}</p><ul className="project-highlights">{project.highlights.map(item => <li key={item}><Check size={14} />{item}</li>)}</ul><div className="tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div><details className="technical-details"><summary>Full technical stack <span>+</span></summary><p>{project.detail}</p></details><div className="project-links">{project.live && <External href={project.live} className="project-live">Open project</External>}<External href={`${github}${project.repo}`}><Github size={15} />Code</External></div></div></article>)}</div><div className="work-footer"><span className="mono">MORE EXPERIMENTS. MORE SIDE QUESTS.</span><External href={`${github}?tab=repositories`}>All repositories</External></div></section>
-      <section className="stack-section section-space" id="stack"><div className="wrap"><div className="section-heading"><div><p className="eyebrow">02 / THE TOOLKIT</p><h2>Many tools.<br /><em>One curious mind.</em></h2></div><div className="stack-symbol" aria-hidden="true"><Cpu size={68} strokeWidth={.8} /></div></div><article className="ai-focus"><div className="ai-focus-visual" aria-hidden="true"><span /><span /><span /><span /><span /><i /><i /><i /></div><div><span className="mono">CURRENT FOCUS / AI + MACHINE LEARNING</span><h3>Learning how systems <em>learn.</em></h3><p>Working through the ML pipeline—from data preparation and feature engineering to training, evaluation, deployment and monitoring.</p><div className="ai-tags"><span>Python</span><span>NumPy</span><span>pandas</span><span>scikit-learn</span><span>MLOps</span></div></div></article><div className="toolkit-layout"><div className="toolkit-filters" aria-label="Technology categories">{toolkit.map((group, i) => <button key={group.title} aria-pressed={toolGroup === i} aria-controls="toolkit-panel" onClick={() => setToolGroup(i)}><span className="mono">0{i + 1}</span>{group.title}<ArrowUpRight size={16} /></button>)}</div><div className="toolkit-panel" id="toolkit-panel"><span className="mono">TOOLS I’VE WORKED WITH / 0{toolGroup + 1}</span><h3>{toolkit[toolGroup].title}<span>_</span></h3><div className="tech-cloud" key={toolGroup}>{toolkit[toolGroup].items.map((item, i) => <span key={item} style={{ animationDelay: `${i * 25}ms` }}>{item}</span>)}</div><p>No proficiency bars. Just tools behind the things I build.</p></div></div></div></section>
-      <section className="journey-section wrap section-space" id="journey">
-        <div className="section-heading"><div><p className="eyebrow">03 / PEOPLE, PRODUCTS & PROGRESS</p><h2>More than <em>a commit log.</em></h2></div><p>Technical experience first.<br />The leadership behind it, too.</p></div>
-        <div className="journey-layout"><div><div className="timeline">{experience.map(({ period, org, title, description, icon: Icon }) => <article key={title}><div className="timeline-icon"><Icon size={19} /></div><span className="mono">{period} / {org}</span><h3>{title}</h3><p>{description}</p></article>)}</div>
-          <div className="leadership-label mono">SELECTED LEADERSHIP / TRUSTED WITH PEOPLE + EXECUTION</div><div className="leadership-spotlights"><article className="current-role"><span className="current-role-icon"><Workflow size={19} /></span><div><span className="mono">AUG 2026 — PRESENT / CURRENT CAMPUS ROLE</span><h3>Placement Committee Member</h3><p>Career Services Center · Bennett University</p><small>Selected to support placement coordination while continuing to build technical projects.</small></div></article><article className="current-role council-role"><span className="current-role-icon"><Sparkles size={19} /></span><div><span className="mono">JUL 2025 — MAY 2026 / STUDENT COUNCIL</span><h3>Sub Head · Operations</h3><p>Bennett University Student Council</p><small>Trusted with teams, resources and event logistics—including the smooth execution of Uphoria, the university’s three-day annual fest.</small></div></article></div>
-          <details className="supporting-experience"><summary>More leadership & operations <span>04 more roles +</span></summary><div>{supportingExperience.map(([period, role, org]) => <article key={`${period}-${role}`}><span className="mono">{period}</span><div><h4>{role}</h4><p>{org}</p></div></article>)}</div><External href={linkedin}>Full timeline on LinkedIn</External></details>
-        </div><aside className="practice-panel"><div className="practice-heading mono"><span>THE PROBLEM-SOLVING LOOP</span><Braces size={21} /></div><h3>One more<br /><em>“got it.”</em></h3><p>Arrays. Hashing. Binary search. Sorting.<br />Small reps, sharper thinking.</p><div className="practice-stats"><div><strong>12<span>↗</span></strong><span>problems synced</span></div><div><strong>03<span>d</span></strong><span>verified streak</span></div></div><div className="practice-topics mono"><span>arrays[]</span><span>hash&#123;&#125;</span><span>search()</span></div><small>Repository snapshot · 5 Sep 2026<br />Streak: 2–4 Sep · Synced submissions only</small><External href={`${github}/neetcode-submissions`}>NeetCode submissions</External></aside></div>
-      </section>
-      <section className="credentials-section wrap section-space" id="credentials"><div className="section-heading"><div><p className="eyebrow">04 / VERIFIED LEARNING</p><h2>Proof of <em>curiosity.</em></h2></div><p>Technical credentials lead.<br />Every listed certification follows.</p></div><div className="certificate-list">{certifications.map(({ title, tag, icon: Icon }, i) => <External key={title} href={linkedin} className="certificate"><span className="certificate-icon"><Icon size={23} strokeWidth={1.3} /></span><div><span className="mono">{String(i + 1).padStart(2, '0')} / {tag}</span><h3>{title}</h3></div></External>)}</div><External href={linkedin} className="credential-link">View credentials on LinkedIn</External></section>
-      <section className="contact-section" id="contact"><div className="contact-orbit" aria-hidden="true" /><div className="wrap"><p className="eyebrow"><span className="signal-dot" /> 05 / OPEN A CONVERSATION</p><h2>Got a wild idea?<br /><em>Let’s make it work.</em></h2><div className="contact-bottom"><p>A project, a learning opportunity, or a tricky<br className="desktop-break" /> problem worth figuring out. I’m listening.</p><div><External href={linkedin} className="primary-button"><Linkedin size={18} />Let’s connect</External><External href={github} className="contact-github"><Github size={18} />GitHub</External></div></div></div></section>
-    </main><footer className="site-footer wrap"><a className="wordmark" href="#home" aria-label="Back to top">a<span>/</span></a><span className="mono">© {new Date().getFullYear()} AMEYA AGARWAL · BUILT WITH CURIOSITY.</span><a href="#home" className="mono">BACK TO TOP <ArrowUpRight size={14} /></a></footer>
-  </div>;
+  );
 }
