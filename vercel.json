@@ -26,5 +26,12 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://ameya5006.github.io/",
+      "permanent": false
+    }
   ]
 }
